@@ -41,6 +41,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin.login']], function ()
     Route::get('/ad/setStatus/{id}', 'Admin\ADController@setStatus');  //设置轮播图状态
     Route::get('/ad/del/{id}', 'Admin\ADController@del');  //删除广告图
 
+    //系统配置信息相关
+    Route::get('/system/index', 'Admin\SystemController@index');  //系统配置首页信息
+    Route::get('/system/edit', 'Admin\SystemController@edit');  //设置系统页面
+    Route::post('/system/edit', 'Admin\SystemController@editPost');  //设置系统页面-post
 
 });
 

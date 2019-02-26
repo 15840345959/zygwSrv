@@ -41,8 +41,8 @@
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>轮播图片：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input id="img" name="img" type="text" class="input-text"
-                           value="{{ isset($data->img) ? $data->img : '' }}" placeholder="请选择轮播图片">
+                    <input id="image" name="image" type="text" class="input-text"
+                           value="{{ isset($data->image) ? $data->image : '' }}" placeholder="请选择轮播图片">
                 </div>
             </div>
             <div class="row cl">
@@ -50,7 +50,7 @@
                 <div class="formControls col-xs-8 col-sm-9">
                     <div id="container">
                         <img id="pickfiles"
-                             src="{{ $data->img ? $data->img.'?imageView2/1/w/200/h/100/interlace/1/q/75|imageslim' : URL::asset('/img/upload.png')}}"
+                             src="{{ $data->image ? $data->image.'?imageView2/1/w/200/h/100/interlace/1/q/75|imageslim' : URL::asset('/img/upload.png')}}"
                              style="width: 350px;">
                     </div>
                     <div style="font-size: 12px;margin-top: 10px;" class="text-gray">*请上传600*300尺寸图片
@@ -83,6 +83,18 @@
 @section('script')
 
     <script type="text/javascript">
+
+
+        //初始化编辑器
+        var ue = UE.getEditor('content_html', {
+            initialFrameHeight: 400
+        });
+
+        ue.ready(function () {
+            ue.execCommand('serverparam', '_token', '{{ csrf_token() }}'); // 设置 CSRF token.
+        });
+
+
         $(function () {
             //获取七牛token
             initQNUploader();
@@ -91,7 +103,7 @@
                     title: {
                         required: true,
                     },
-                    img: {
+                    image: {
                         required: true,
                     },
                 },
@@ -200,8 +212,8 @@
                         var res = JSON.parse(info);
                         //获取上传成功后的文件的Url
                         var sourceLink = domain + res.key;
-                        $("#img").val(sourceLink);
-                        $("#pickfiles").attr('src', qiniuUrlTool(sourceLink, "head_icon"));
+                        $("#image").val(sourceLink);
+                        $("#pickfiles").attr('src', sourceLink);
 //                        console.log($("#pickfiles").attr('src'));
                     },
                     'Error': function (up, err, errTip) {

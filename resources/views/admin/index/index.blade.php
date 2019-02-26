@@ -92,7 +92,7 @@
                 <dt class="Hui-menu-title">配置数据<i class="Hui-iconfont Hui-admin-menu-dropdown-arrow">&#xe6d5;</i></dt>
                 <dd class="Hui-menu-item">
                     <ul>
-                        <li><a data-href="" data-title="积分规则"
+                        <li><a data-href="{{ URL::asset('/admin/system/index') }}" data-title="积分规则"
                                href="javascript:void(0)">积分规则</a></li>
                         <li><a data-href="" data-title="楼盘标签管理"
                                href="javascript:void(0)">楼盘标签管理</a></li>

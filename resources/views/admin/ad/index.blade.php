@@ -57,14 +57,16 @@
                     <tr class="text-c">
                         {{--<td><input type="checkbox" value="1" name=""></td>--}}
                         <td>{{$data->id}}</td>
-                        <td><img src="{{ $data->img.'?imageView2/1/w/100/h/60/interlace/1/q/75|imageslim'}}"/></td>
+                        <td><img src="{{ $data->image.'?imageView2/1/w/100/h/60/interlace/1/q/75|imageslim'}}"/></td>
                         <td>{{$data->title}}</td>
                         {{--<td>{{$data->position}}</td>--}}
                         <td>
                             {{$data->seq}}
                         </td>
                         <td>{{$data->created_at}}</td>
-                        <td>{{$data->type_str}}</td>
+                        <td>
+                            <span class="c-primary">{{$data->type_str}}</span>
+                        </td>
                         <td class="td-status">
                             @if($data->status=="1")
                                 <span class="label label-success radius">显示</span>

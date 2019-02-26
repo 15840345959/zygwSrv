@@ -180,6 +180,7 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
 
         Overtrue\LaravelFilesystem\Qiniu\QiniuStorageServiceProvider::class,
+        Overtrue\LaravelUEditor\UEditorServiceProvider::class,
 
     ],
 

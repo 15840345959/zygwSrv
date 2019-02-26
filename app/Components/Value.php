@@ -24,6 +24,6 @@ class Value
     const ADMIN_ROLE_VAL = ['0' => '管理员', '1' => '超级管理员'];
 
     //广告位管理
-    const AD_TYPE_VAL = ['0' => '不跳转', '1' => '跳转'];
+    const AD_TYPE_VAL = ['0' => '不跳转', '1' => '跳转内容'];
 
 }
