@@ -37,15 +37,15 @@
                 <dt class="Hui-menu-title">案场/中介<i class="Hui-iconfont Hui-admin-menu-dropdown-arrow">&#xe6d5;</i></dt>
                 <dd class="Hui-menu-item">
                     <ul>
-                        <li><a data-href="" data-title="升级审核"
+                        <li><a data-href="{{ URL::asset('/admin/user/userUp/index') }}" data-title="升级审核"
                                href="javascript:void(0)">升级审核</a></li>
-                        <li><a data-href="" data-title="案场负责人管理"
+                        <li><a data-href="{{ URL::asset('/admin/user/userACFZR/index') }}" data-title="案场负责人管理"
                                href="javascript:void(0)">案场负责人管理</a></li>
-                        <li><a data-href="" data-title="中介人员管理"
+                        <li><a data-href="{{ URL::asset('/admin/user/userZJ/index') }}" data-title="中介人员管理"
                                href="javascript:void(0)">中介人员管理</a></li>
-                        <li><a data-href="" data-title="中介排名"
-                               href="javascript:void(0)">中介排名</a></li>
-                        <li><a data-href="" data-title="签到明细"
+                        {{--<li><a data-href="" data-title="中介排名"--}}
+                        {{--href="javascript:void(0)">中介排名</a></li>--}}
+                        <li><a data-href="{{ URL::asset('/admin/user/userQD/index') }}" data-title="签到明细"
                                href="javascript:void(0)">签到明细</a></li>
                     </ul>
                 </dd>
@@ -54,10 +54,12 @@
                 <dt class="Hui-menu-title">楼盘管理<i class="Hui-iconfont Hui-admin-menu-dropdown-arrow">&#xe6d5;</i></dt>
                 <dd class="Hui-menu-item">
                     <ul>
-                        <li><a data-href="" data-title="楼盘管理"
+                        <li><a data-href="{{ URL::asset('/admin/house/house/index') }}" data-title="楼盘管理"
                                href="javascript:void(0)">楼盘管理</a></li>
-                        <li><a data-href="" data-title="楼盘联系人"
+                        <li><a data-href="{{ URL::asset('/admin/house/houseContact/index') }}" data-title="楼盘联系人"
                                href="javascript:void(0)">楼盘联系人</a></li>
+                        <li><a data-href="{{ URL::asset('/admin/house/houseClient/index') }}" data-title="房产商客户"
+                               href="javascript:void(0)">房产商客户</a></li>
                     </ul>
                 </dd>
             </dl>
@@ -85,20 +87,28 @@
             </dl>
             <dl class="Hui-menu">
                 <dt class="Hui-menu-title">
-                    规则管理
+                    规则管理<i class="Hui-iconfont Hui-admin-menu-dropdown-arrow">&#xe6d5;</i>
                 </dt>
-            </dl>
-            <dl class="Hui-menu">
-                <dt class="Hui-menu-title">配置数据<i class="Hui-iconfont Hui-admin-menu-dropdown-arrow">&#xe6d5;</i></dt>
                 <dd class="Hui-menu-item">
                     <ul>
                         <li><a data-href="{{ URL::asset('/admin/system/index') }}" data-title="积分规则"
                                href="javascript:void(0)">积分规则</a></li>
-                        <li><a data-href="" data-title="楼盘标签管理"
+                        <li><a data-href="{{ URL::asset('/admin/tw/index') }}" data-title="白皮书管理"
+                               href="javascript:void(0)">白皮书管理</a></li>
+                    </ul>
+                </dd>
+            </dl>
+            <dl class="Hui-menu">
+                <dt class="Hui-menu-title">配置数据<span
+                            class="label label-danger radius ml-10">!</span><i
+                            class="Hui-iconfont Hui-admin-menu-dropdown-arrow">&#xe6d5;</i></dt>
+                <dd class="Hui-menu-item">
+                    <ul>
+                        <li><a data-href="{{ URL::asset('/admin/house/houseLabel/index') }}" data-title="楼盘标签管理"
                                href="javascript:void(0)">楼盘标签管理</a></li>
-                        <li><a data-href="" data-title="楼盘类型管理"
+                        <li><a data-href="{{ URL::asset('/admin/house/houseType/index') }}" data-title="楼盘类型管理"
                                href="javascript:void(0)">楼盘类型管理</a></li>
-                        <li><a data-href="" data-title="楼盘区域管理"
+                        <li><a data-href="{{ URL::asset('/admin/house/houseArea/index') }}" data-title="楼盘区域管理"
                                href="javascript:void(0)">楼盘区域管理</a></li>
                     </ul>
                 </dd>
@@ -124,7 +134,7 @@
                 <div class="container-fluid clearfix">
                     <nav id="Hui-userbar" class="nav navbar-nav navbar-userbar">
                         <ul class="clearfix">
-                            <li>管理员</li>
+                            <li></li>
                             {{--<li><img src="{{$partner->gzh_ewm}}?imageView2/1/w/50/h/50/interlace/1"--}}
                             {{--style="width: 28px;height: 28px;border-radius: 50%;"--}}
                             {{--class="ml-10"></li>--}}

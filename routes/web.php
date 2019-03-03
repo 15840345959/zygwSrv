@@ -46,6 +46,92 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin.login']], function ()
     Route::get('/system/edit', 'Admin\SystemController@edit');  //设置系统页面
     Route::post('/system/edit', 'Admin\SystemController@editPost');  //设置系统页面-post
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //楼盘标签管理
+    Route::any('/house/houseLabel/index', 'Admin\House\HouseLabelController@index');  //楼盘标签管理
+    Route::get('/house/houseLabel/edit', 'Admin\House\HouseLabelController@edit');  //楼盘标签管理添加、编辑-get
+    Route::post('/house/houseLabel/edit', 'Admin\House\HouseLabelController@editPost');  //楼盘标签管理添加、编辑-post
+    Route::get('/house/houseLabel/setStatus/{id}', 'Admin\House\HouseLabelController@setStatus');  //设置楼盘标签状态
+
+    //楼盘类型管理
+    Route::any('/house/houseType/index', 'Admin\House\HouseTypeController@index');  //楼盘类型管理
+    Route::get('/house/houseType/edit', 'Admin\House\HouseTypeController@edit');  //楼盘类型管理添加、编辑-get
+    Route::post('/house/houseType/edit', 'Admin\House\HouseTypeController@editPost');  //楼盘类型管理添加、编辑-post
+    Route::get('/house/houseType/setStatus/{id}', 'Admin\House\HouseTypeController@setStatus');  //设置楼盘类型状态
+
+    //楼盘区域管理
+    Route::any('/house/houseArea/index', 'Admin\House\HouseAreaController@index');  //楼盘区域管理
+    Route::get('/house/houseArea/edit', 'Admin\House\HouseAreaController@edit');  //楼盘区域管理添加、编辑-get
+    Route::post('/house/houseArea/edit', 'Admin\House\HouseAreaController@editPost');  //楼盘区域管理添加、编辑-post
+    Route::get('/house/houseArea/setStatus/{id}', 'Admin\House\HouseAreaController@setStatus');  //设置楼盘区域状态
+
+    //项目楼盘联系人相关
+    Route::any('/house/houseContact/index', 'Admin\House\HouseContactController@index');//根据楼盘id获取相应的楼盘联系人
+    Route::get('/house/houseContact/edit', 'Admin\House\HouseContactController@edit');//新建或编辑楼盘联系人
+    Route::post('/house/houseContact/edit', 'Admin\House\HouseContactController@editPost');//新建或编辑楼盘联系人
+    Route::get('/house/houseContact/setStatus/{id}', 'Admin\House\HouseContactController@setStatus');  //设置楼盘联系人状态
+
+    //楼盘管理
+    Route::any('/house/house/index', 'Admin\House\HouseController@index');  //楼盘管理
+    Route::get('/house/house/edit', 'Admin\House\HouseController@edit');  //楼盘管理添加、编辑-get
+    Route::post('/house/house/edit', 'Admin\House\HouseController@editPost');  //楼盘管理添加、编辑-post
+    Route::get('/house/house/setStatus/{id}', 'Admin\House\HouseController@setStatus');  //设置楼盘状态
+
+    //户型管理
+    Route::get('/house/huxing/edit', 'Admin\House\HuxingController@edit');  //户型管理添加、编辑-get
+    Route::post('/house/huxing/edit', 'Admin\House\HuxingController@editPost');  //户型管理添加、编辑-post
+    Route::get('/house/huxing/setStatus/{id}', 'Admin\House\HuxingController@setStatus');  //设置户型状态
+    Route::get('/house/huxing/editYongjin', 'Admin\House\HuxingController@editYongjin');//新建或编辑产品的佣金
+    Route::post('/house/huxing/editYongjin', 'Admin\House\HuxingController@editYongjinPost');//新建或编辑产品的佣金
+    Route::get('/house/huxingYongjinRecord/index', 'Admin\House\HuxingYongjinRecordController@index');//户型佣金记录首页
+
+    //项目户型样式相关
+    Route::any('/house/huxingStyle/index', 'Admin\House\HuxingStyleController@index');//根据户型样式id获取相应的户型样式
+    Route::get('/house/huxingStyle/edit', 'Admin\House\HuxingStyleController@edit');//新建或编辑户型样式
+    Route::post('/house/huxingStyle/edit', 'Admin\House\HuxingStyleController@editPost');//新建或编辑户型样式
+    Route::get('/house/huxingStyle/setStatus/{id}', 'Admin\House\HuxingStyleController@setStatus');  //设置户型样式状态
+
+    //项目楼盘客户相关
+    Route::any('/house/houseClient/index', 'Admin\House\HouseClientController@index');//根据楼盘客户id获取相应的楼盘客户
+    Route::get('/house/houseClient/edit', 'Admin\House\HouseClientController@edit');//新建或编辑楼盘客户
+    Route::post('/house/houseClient/edit', 'Admin\House\HouseClientController@editPost');//新建或编辑楼盘客户
+    Route::get('/house/houseClient/del/{id}', 'Admin\House\HouseClientController@del');  //删除楼盘客户
+
+    //楼盘详情
+    Route::post('/house/detail/edit', 'Admin\House\HouseDetailController@editPost');  //楼盘详情管理添加、编辑-post
+
+    //置业顾问
+    Route::get('/house/zygw/edit', 'Admin\House\ZYGWController@edit');  //置业顾问管理添加、编辑-get
+    Route::post('/house/zygw/edit', 'Admin\House\ZYGWController@editPost');  //置业顾问管理添加、编辑-post
+    Route::get('/house/zygw/setStatus/{id}', 'Admin\House\ZYGWController@setStatus');  //设置置业顾问状态
+
+    //规则编辑
+    Route::any('/tw/index', 'Admin\TWController@index');  //规则首页
+    Route::get('/tw/edit', 'Admin\TWController@edit');    //规则编辑管理添加、编辑-get
+    Route::post('/tw/edit', 'Admin\TWController@editPost');    //规则编辑管理添加、编辑-post
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //用户相关管理-中介+案场负责人
+    //中介
+    Route::any('/user/userZJ/index', 'Admin\User\UserZJController@index');  //中介首页
+
+    //案场负责人
+    Route::any('/user/userACFZR/index', 'Admin\User\UserACFZRController@index');  //案场负责人
+
+    //签到
+    Route::any('/user/userQD/index', 'Admin\User\UserQDController@index');  //签到明细
+
+    //中介申请成为案场负责人管理
+    Route::any('/user/userUp/index', 'Admin\User\UserUpController@index');  //案场升级
+    Route::get('/user/userUp/setStatus/{id}', 'Admin\User\UserUpController@setStatus');  //设置升级状态
+
+    Route::get('/user/setStatus/{id}', 'Admin\User\UserController@setStatus');  //设置用户状态
+    Route::get('/user/setRole/{id}', 'Admin\User\UserController@setRole');  //设置角色
+
 });
 
 
