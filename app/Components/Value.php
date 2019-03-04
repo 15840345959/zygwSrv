@@ -40,4 +40,7 @@ class Value
     //白皮书类型
     const TW_TYPE_VAL = ['1' => '合作细则', '2' => '行业白皮书', '3' => '积分兑换规则'];
 
+
+    //兑换状态
+    const GOODS_EXCHANGE_STATUS_VAL = ['0' => '未兑付', '1' => '已兑付'];
 }

@@ -67,7 +67,7 @@
                 <dt class="Hui-menu-title">客户管理<i class="Hui-iconfont Hui-admin-menu-dropdown-arrow">&#xe6d5;</i></dt>
                 <dd class="Hui-menu-item">
                     <ul>
-                        <li><a data-href="" data-title="客户管理"
+                        <li><a data-href="{{ URL::asset('/admin/client/index') }}" data-title="客户管理"
                                href="javascript:void(0)">客户管理</a></li>
                         <li><a data-href="" data-title="报备查询"
                                href="javascript:void(0)">报备查询</a></li>
@@ -78,10 +78,12 @@
                 <dt class="Hui-menu-title">积分兑换<i class="Hui-iconfont Hui-admin-menu-dropdown-arrow">&#xe6d5;</i></dt>
                 <dd class="Hui-menu-item">
                     <ul>
-                        <li><a data-href="" data-title="商品管理"
+                        <li><a data-href="{{ URL::asset('/admin/jifen/goods/index') }}" data-title="商品管理"
                                href="javascript:void(0)">商品管理</a></li>
-                        <li><a data-href="" data-title="兑换订单"
+                        <li><a data-href="{{ URL::asset('/admin/jifen/goodsExchange/index') }}" data-title="兑换订单"
                                href="javascript:void(0)">兑换订单</a></li>
+                        <li><a data-href="{{ URL::asset('/admin/jifen/jifenChangeRecord/index') }}" data-title="积分变更明细"
+                               href="javascript:void(0)">积分变更明细</a></li>
                     </ul>
                 </dd>
             </dl>
@@ -110,6 +112,18 @@
                                href="javascript:void(0)">楼盘类型管理</a></li>
                         <li><a data-href="{{ URL::asset('/admin/house/houseArea/index') }}" data-title="楼盘区域管理"
                                href="javascript:void(0)">楼盘区域管理</a></li>
+                        <li><a data-href="{{ URL::asset('/admin/baobei/baobeiBuyPurpose/index') }}"
+                               data-title="报备购买目的管理"
+                               href="javascript:void(0)">报备购买目的管理</a></li>
+                        <li><a data-href="{{ URL::asset('/admin/baobei/baobeiKnowWay/index') }}"
+                               data-title="报备认知途径管理"
+                               href="javascript:void(0)">报备认知途径管理</a></li>
+                        <li><a data-href="{{ URL::asset('/admin/baobei/baobeiPayWay/index') }}"
+                               data-title="报备付款方式管理"
+                               href="javascript:void(0)">报备付款方式管理</a></li>
+                        <li><a data-href="{{ URL::asset('/admin/baobei/baobeiClientCare/index') }}"
+                               data-title="报备客户关注管理"
+                               href="javascript:void(0)">报备客户关注管理</a></li>
                     </ul>
                 </dd>
             </dl>

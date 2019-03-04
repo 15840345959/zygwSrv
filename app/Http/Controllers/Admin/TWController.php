@@ -28,14 +28,14 @@ class TWController
      */
     public static function index(Request $request)
     {
-        $twmin = $request->session()->get('admin');
+        $admin = $request->session()->get('admin');
         $data = $request->all();
         //相关搜素条件
         $tws = TWManager::getListByCon([], true);
         foreach ($tws as $tw) {
             $tw = TWManager::getInfoByLevel($tw, '');
         }
-        return view('admin.tw.index', ['admin' => $twmin, 'datas' => $tws]);
+        return view('admin.tw.index', ['admin' => $admin, 'datas' => $tws]);
     }
 
     /*

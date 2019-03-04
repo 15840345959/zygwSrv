@@ -10,44 +10,47 @@
 namespace App\Components;
 
 use App\Models\AD;
-use App\Models\House;
-use App\Models\HouseArea;
-use App\Models\Huxing;
-use Illuminate\Support\Facades\DB;
+use App\Models\BaobeiKnowWay;
 use Qiniu\Auth;
 
-class HouseAreaManager
+class BaobeiKnowWayManager
 {
 
     /*
-     * 根据id获取楼盘标签信息
+     * 根据id获取信息
      *
      * By TerryQi
      *
-     * 2018-01-21
+     * 2017-11-27
      *
      */
     public static function getById($id)
     {
-        $info = HouseArea::where('id', '=', $id)->first();
-        return $info;
+        $clientCare = BaobeiKnowWay::where('id', '=', $id)->first();
+        return $clientCare;
     }
 
-    /*获取全部的楼盘标签信息
+    /*
+     * 获取生效的购买目的
      *
-     * By Yinyue
-     * 2018-1-22
+     * By TerryQi
+     *
+     * 2017-12-13
+     *
      */
-
     public static function getListByCon($con_arr, $is_paginate)
     {
-        $infos = new HouseArea();
+        $infos = new BaobeiKnowWay();
 
         if (array_key_exists('status', $con_arr) && !Utils::isObjNull($con_arr['status'])) {
             $infos = $infos->where('status', '=', $con_arr['status']);
         }
+        if (array_key_exists('ids_arr', $con_arr) && !Utils::isObjNull($con_arr['ids_arr'])) {
+            $infos = $infos->wherein('id', $con_arr['ids_arr']);
+        }
 
-        $infos = $infos->orderby('id', 'desc');
+        $infos = $infos->orderby('seq', 'desc')->orderby('id', 'desc');
+
         if ($is_paginate) {
             $infos = $infos->paginate(Utils::PAGE_SIZE);
         } else {
@@ -56,9 +59,8 @@ class HouseAreaManager
         return $infos;
     }
 
-
     /*
-     * 设置楼盘标签
+     * 设置购买目的
      *
      * By TerryQi
      *
@@ -71,6 +73,9 @@ class HouseAreaManager
         }
         if (array_key_exists('name', $data)) {
             $info->name = array_get($data, 'name');
+        }
+        if (array_key_exists('seq', $data)) {
+            $info->seq = array_get($data, 'seq');
         }
         return $info;
     }
@@ -94,5 +99,6 @@ class HouseAreaManager
 
         return $info;
     }
+
 
 }

@@ -240,4 +240,24 @@ class Utils
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+    /*
+     * 下载图片$url:图片url，存入$path路径
+     *
+     * By TerryQi
+     *
+     * 2018-10-30
+     */
+    public static function downloadImage($url, $path)
+    {
+        $arr = parse_url($url);
+        $img_name = pathinfo($arr['path'])['basename'];
+//        dd($img_name);
+        $file_content = file_get_contents($url);
+
+        file_put_contents($path . $img_name, $file_content);
+
+        return $img_name;
+    }
+
 }

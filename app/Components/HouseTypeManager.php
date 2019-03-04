@@ -58,8 +58,6 @@ class HouseTypeManager
             $infos = $infos->get();
         }
         return $infos;
-
-        return $infos;
     }
 
 

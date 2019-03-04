@@ -62,7 +62,7 @@
                     {{--<td><input type="checkbox" value="1" name=""></td>--}}
                     <td>{{$data->id}}</td>
                     <td>
-                        <img src="{{ $data->avatar ? $data->avatar.'?imageView2/1/w/200/h/200/interlace/1/q/75|imageslim' : URL::asset('/img/default_headicon.png')}}"
+                        <img src="{{ $data->avatar ? $data->avatar.'?imageView2/1/w/200/h/200/interlace/1/q/75|imageslim' : Url::asset('/img/default_headicon.png')}}"
                              class="img-rect-30 radius-5">
                     </td>
                     <td>{{$data->name}}</td>

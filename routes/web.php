@@ -101,6 +101,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin.login']], function ()
     //楼盘详情
     Route::post('/house/detail/edit', 'Admin\House\HouseDetailController@editPost');  //楼盘详情管理添加、编辑-post
 
+    //客户管理
+    Route::any('/client/index', 'Admin\ClientController@index');  //客户管理首页
+
+
     //置业顾问
     Route::get('/house/zygw/edit', 'Admin\House\ZYGWController@edit');  //置业顾问管理添加、编辑-get
     Route::post('/house/zygw/edit', 'Admin\House\ZYGWController@editPost');  //置业顾问管理添加、编辑-post
@@ -131,6 +135,48 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin.login']], function ()
 
     Route::get('/user/setStatus/{id}', 'Admin\User\UserController@setStatus');  //设置用户状态
     Route::get('/user/setRole/{id}', 'Admin\User\UserController@setRole');  //设置角色
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    ////////////////////////////////////////////////////////////////////////////////
+    //项目购买目的相关
+    Route::any('/baobei/baobeiBuyPurpose/index', 'Admin\Baobei\BaobeiBuyPurposeController@index');//根据购买目的id获取相应的购买目的
+    Route::get('/baobei/baobeiBuyPurpose/edit', 'Admin\Baobei\BaobeiBuyPurposeController@edit');//新建或编辑购买目的
+    Route::post('/baobei/baobeiBuyPurpose/edit', 'Admin\Baobei\BaobeiBuyPurposeController@editPost');//新建或编辑购买目的
+    Route::get('/baobei/baobeiBuyPurpose/setStatus/{id}', 'Admin\Baobei\BaobeiBuyPurposeController@setStatus');  //设置购买目的状态
+
+    Route::any('/baobei/baobeiKnowWay/index', 'Admin\Baobei\BaobeiKnowWayController@index');//根据购买目的id获取相应的购买目的
+    Route::get('/baobei/baobeiKnowWay/edit', 'Admin\Baobei\BaobeiKnowWayController@edit');//新建或编辑购买目的
+    Route::post('/baobei/baobeiKnowWay/edit', 'Admin\Baobei\BaobeiKnowWayController@editPost');//新建或编辑购买目的
+    Route::get('/baobei/baobeiKnowWay/setStatus/{id}', 'Admin\Baobei\BaobeiKnowWayController@setStatus');  //设置购买目的状态
+
+    Route::any('/baobei/baobeiPayWay/index', 'Admin\Baobei\BaobeiPayWayController@index');//根据购买目的id获取相应的购买目的
+    Route::get('/baobei/baobeiPayWay/edit', 'Admin\Baobei\BaobeiPayWayController@edit');//新建或编辑购买目的
+    Route::post('/baobei/baobeiPayWay/edit', 'Admin\Baobei\BaobeiPayWayController@editPost');//新建或编辑购买目的
+    Route::get('/baobei/baobeiPayWay/setStatus/{id}', 'Admin\Baobei\BaobeiPayWayController@setStatus');  //设置购买目的状态
+
+    Route::any('/baobei/baobeiClientCare/index', 'Admin\Baobei\BaobeiClientCareController@index');//根据购买目的id获取相应的购买目的
+    Route::get('/baobei/baobeiClientCare/edit', 'Admin\Baobei\BaobeiClientCareController@edit');//新建或编辑购买目的
+    Route::post('/baobei/baobeiClientCare/edit', 'Admin\Baobei\BaobeiClientCareController@editPost');//新建或编辑购买目的
+    Route::get('/baobei/baobeiClientCare/setStatus/{id}', 'Admin\Baobei\BaobeiClientCareController@setStatus');  //设置购买目的状态
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //商品相关
+    Route::any('/jifen/goods/index', 'Admin\Jifen\GoodsController@index');//根据商品id获取相应的商品
+    Route::get('/jifen/goods/edit', 'Admin\Jifen\GoodsController@edit');//新建或编辑商品
+    Route::post('/jifen/goods/edit', 'Admin\Jifen\GoodsController@editPost');//新建或编辑商品
+    Route::get('/jifen/goods/setStatus/{id}', 'Admin\Jifen\GoodsController@setStatus');  //设置商品状态
+
+    //商品兑换订单
+    Route::any('/jifen/goodsExchange/index', 'Admin\Jifen\GoodsExchangeController@index');  //获取兑换订单
+    Route::get('/jifen/goodsExchange/setStatus/{id}', 'Admin\Jifen\GoodsExchangeController@setStatus');  //设置订单状态
+
+    //积分变更记录
+    Route::any('/jifen/jifenChangeRecord/index', 'Admin\Jifen\JifenChangeRecordController@index');  //积分变更记录-首页
 
 });
 

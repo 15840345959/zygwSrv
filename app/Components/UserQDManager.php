@@ -52,8 +52,6 @@ class UserQDManager
             $infos = $infos->get();
         }
         return $infos;
-
-        return $infos;
     }
 
 
@@ -90,6 +88,22 @@ class UserQDManager
             $info->user = UserManager::getById($info->user_id);
         }
         return $info;
+    }
+
+    /*
+     * 判断该用户今日是否签到过
+     *
+     * By TerryQi
+     *
+     * 2018-01-21
+     *
+     */
+    public static function isUserAlreadyQDToday($user_id)
+    {
+        $today = DateTool::getToday();
+        $tomorrow = DateTool::dateAdd('D', 1, $today);
+        $userQD = UserQD::where('user_id', '=', $user_id)->where('created_at', '>', $today)->where('created_at', '<', $tomorrow)->first();
+        return $userQD;
     }
 
 }

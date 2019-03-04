@@ -89,8 +89,8 @@ return [
      */
     'open_platform' => [
         'default' => [
-            'app_id' => env('WECHAT_OPEN_PLATFORM_APPID', 'wx685ff20a78495315'),
-            'secret' => env('WECHAT_OPEN_PLATFORM_SECRET', '4f8475449f0f8895781e4773dbfc7ccf'),
+            'app_id' => env('WECHAT_OPEN_PLATFORM_APPID', ''),
+            'secret' => env('WECHAT_OPEN_PLATFORM_SECRET', ''),
             'token' => env('WECHAT_OPEN_PLATFORM_TOKEN', ''),
             'aes_key' => env('WECHAT_OPEN_PLATFORM_AES_KEY', ''),
         ],
@@ -101,8 +101,8 @@ return [
      */
     'mini_program' => [
         'default' => [
-            'app_id' => env('WECHAT_MINI_PROGRAM_APPID', 'wxdbbef5b4c4d5566f'),
-            'secret' => env('WECHAT_MINI_PROGRAM_SECRET', '61f8ce0ec1ae3027aa63a0b2f5ce203f'),
+            'app_id' => env('WECHAT_MINI_PROGRAM_APPID', ''),
+            'secret' => env('WECHAT_MINI_PROGRAM_SECRET', ''),
             'token' => env('WECHAT_MINI_PROGRAM_TOKEN', ''),
             'aes_key' => env('WECHAT_MINI_PROGRAM_AES_KEY', ''),
         ],
