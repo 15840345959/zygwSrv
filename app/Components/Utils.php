@@ -260,4 +260,31 @@ class Utils
         return $img_name;
     }
 
+    /*
+     * 下载图片方法
+     *
+     * By TerryQi
+     *
+     * 2018-10-11
+     *
+     * url：下载链接  path：下载路径  filename：文件名
+     *
+     */
+    public static function downloadFile($url, $path, $filename)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+        $file = curl_exec($ch);
+        curl_close($ch);
+
+        $filename = $filename;
+        $resource = fopen($path . '/' . $filename, 'a');
+        fwrite($resource, $file);
+        fclose($resource);
+
+        return $filename;
+    }
+
 }

@@ -63,7 +63,7 @@ class HuxingManager
      *
      * By TerryQi
      *
-     * 0:带类型信息 1：带管理员信息 2:带楼盘信息
+     * 0:带类型信息 1：带管理员信息 2:带楼盘信息 3：带管理员信息
      *
      */
     public static function getInfoByLevel($info, $level)
@@ -89,10 +89,6 @@ class HuxingManager
 
         $info->yongjin_value_str = $yongjin_value_str;
 
-        //0：带管理员信息
-        if (strpos($level, '0') !== false) {
-            $info->admin = AdminManager::getById($info->admin_id);
-        }
         //1：带类型信息
         if (strpos($level, '1') !== false) {
             $info->type = HouseTypeManager::getById($info->type_id);
@@ -101,6 +97,11 @@ class HuxingManager
         if (strpos($level, '2') !== false) {
             $info->house = HouseManager::getById($info->house_id);
         }
+        //3：带管理员信息
+        if (strpos($level, '3') !== false) {
+            $info->admin = AdminManager::getById($info->admin_id);
+        }
+
         return $info;
     }
 

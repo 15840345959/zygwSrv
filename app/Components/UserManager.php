@@ -93,6 +93,9 @@ class UserManager
         if (array_key_exists('role', $con_arr) && !Utils::isObjNull($con_arr['role'])) {
             $infos = $infos->where('role', '=', $con_arr['role']);
         }
+        if (array_key_exists('xcx_openid', $con_arr) && !Utils::isObjNull($con_arr['xcx_openid'])) {
+            $infos = $infos->where('xcx_openid', '=', $con_arr['xcx_openid']);
+        }
         if (array_key_exists('search_word', $con_arr) && !Utils::isObjNull($con_arr['search_word'])) {
             $keyword = $con_arr['search_word'];
             $infos = $infos->where(function ($query) use ($keyword) {
@@ -282,377 +285,6 @@ class UserManager
 
 
     /*
-     * 用户登录接口
-     *
-     * 说明：针对公众号、小程序等，只有登录流程，没有注册流程
-     *
-     * By TerryQi
-     *
-     * 2018-07-03
-     *
-     * account为账户类型，详见数据字典
-     *
-     * $data为封装的信息，其中包括登录信息和用户基本信息，需要拆开
-     *
-     */
-    public static function login($account_type, $data)
-    {
-        if ($data == null) {
-            return null;
-        }
-
-        $user = null;   //返回的用户信息
-        //根据登录账号类型的不同，分别处理
-        switch ($account_type) {
-
-            case Utils::ACCOUNT_TYPE_FWH:       //公众号登录
-                $user = self::loginFWH($data);
-                break;
-            case Utils::ACCOUNT_TYPE_XCX:   //小程序登录
-                $user = self::loginXCX($data);
-                break;
-        }
-
-        //进行用户的头像处理
-        /*
-         * 2018-12-26日进行优化，在运营过程中发现，部分用户头像丢失的问题，经排查问题为用户更换头像，则微信登录时的头像则失效，因此在登录时需要进行用户头像的处理
-         *
-         * 如果用户头像属于三方，则进行七牛上传，并更新
-         *
-         * By TerryQi
-         *
-         */
-        UserAvaterManager::setAvaterToQN($user->id);
-
-        return $user;
-    }
-
-
-    /*
-     * 公众号的登录和注册流程
-     *
-     * By TerryQi
-     *
-     * 2018-07-03
-     *
-     * 其中data中应该包含openid、unionid（可选）信息
-     */
-    public static function loginFWH($data)
-    {
-        Utils::processLog(__METHOD__, '', " " . "data:" . json_encode($data));
-        $user = null;   //应返回用户信息
-        //第一步，入参中是否有unionid信息，如果有，则通过uniond判断用户，平台中是否已有用户信息
-        if (array_key_exists('unionid', $data)) {
-            $con_arr = array(
-                've_value2' => $data['unionid']
-            );
-            $login = LoginManager::getListByCon($con_arr, false)->first();  //根据unionid获取登录信息
-            //如果已经有用户信息，则获取用户信息，并进行登录信息补全，返回用户信息
-            if ($login) {
-                Utils::processLog(__METHOD__, '', " " . "condition1 login:" . json_encode($login));
-                $user = UserManager::getByIdWithToken($login->user_id);
-                //补全登录信息
-                self::setLoginFWH($user->id, $data);
-                return $user;
-            }
-        }
-        //第二步，入参是否有openid信息，如果有，则通过openid判断用户，平台中是否已有用户信息
-        if (array_key_exists('openid', $data)) {
-            $con_arr = array(
-                've_value1' => $data['openid']
-            );
-            $login = LoginManager::getListByCon($con_arr, false)->first();  //根据unionid获取登录信息
-            //如果已经有用户信息，则获取用户信息，并进行登录信息补全，返回用户信息
-            if ($login) {
-                Utils::processLog(__METHOD__, '', " " . "condition2 login:" . json_encode($login));
-                $user = UserManager::getByIdWithToken($login->user_id);
-                //补全登录信息
-                self::setLoginFWH($login->user_id, $data);
-                return $user;
-            }
-        }
-        //第三步，如果均未返回用户信息，则代表需要新注册用户
-        //注册用户
-        $user = new User();
-        $user = UserManager::setInfo($user, $data);
-        $user->token = UserManager::getGUID();
-        $user->save();
-        //如果是新注册用户，则给一个new_flag==true//////////////////////////////////////////////////
-        $user->new_flag = true;
-        //new_flag是新用户标识，主要标识用户信息////////////////////////////////////////////////////
-        //补全登录信息
-        $login = self::setLoginFWH($user->id, $data);
-        Utils::processLog(__METHOD__, '', "condition3 login:" . json_encode($login));
-        return $user;
-    }
-
-
-    /*
-     * 公众号补全登录信息，主要解决uniond、openid等缺失的问题
-     *
-     * By TerryQi
-     *
-     * 2018-07-03
-     *
-     * $data中应有busi_name、openid、unionid，分别映射login表中的busi_name、ve_value1、ve_value2
-     *
-     * $user_id为用户id，因此需要注册成功再处理绑定关系
-     *
-     * return false：失败 true：成功
-     *
-     */
-    public static function setLoginFWH($user_id, $data)
-    {
-        Utils::processLog(__METHOD__, '', " " . "user_id:" . $user_id . " data:" . json_encode($data));
-        //user_id如果为空不能往下走
-        if (Utils::isObjNull($user_id)) {
-            return null;
-        }
-        //获取基本信息
-        $busi_name = $data['busi_name'];    //业务名
-        $openid = $data['openid'];      //openid
-        $unionid = null;        //unionid
-        if (array_key_exists('unionid', $data)) {
-            $unionid = $data['unionid'];        //unionid
-        }
-        //根据openid获取用户信息
-        $con_arr = array(
-            've_value1' => $openid
-        );
-        $login = LoginManager::getListByCon($con_arr, false)->first();
-        Utils::processLog(__METHOD__, '', " " . "login:" . json_encode($login));
-        //如果有值，就进行信息补全
-        if (!$login) {
-            $login = new Login();
-        }
-        $login->user_id = $user_id;
-        $login->account_type = Utils::ACCOUNT_TYPE_FWH;
-        $login->busi_name = $busi_name;
-        $login->ve_value1 = $openid;
-        $login->ve_value2 = $unionid;
-        $login->save();
-
-        Utils::processLog(__METHOD__, '', " " . "login:" . json_encode($login));
-
-        return $login;
-    }
-
-
-    /*
-     * 小程序的登录和注册流程
-     *
-     * By TerryQi
-     *
-     * 2018-07-04
-     *
-     * $data中应该包含openid、unionid（可选）、session信息
-     */
-    public static function loginXCX($data)
-    {
-        Utils::processLog(__METHOD__, '', " " . "data:" . json_encode($data));
-        $user = null;   //应返回用户信息
-        //第一步，入参中是否有unionid信息，如果有，则通过uniond判断用户，平台中是否已有用户信息
-        if (array_key_exists('unionid', $data)) {
-            $con_arr = array(
-                've_value2' => $data['unionid']
-            );
-            $login = LoginManager::getListByCon($con_arr, false)->first();  //根据unionid获取登录信息
-            Utils::processLog(__METHOD__, '', " " . "condition1 login pos1:" . json_encode($login));
-            //如果已经有用户信息，则获取用户信息，并进行登录信息补全，返回用户信息
-            if ($login) {
-                Utils::processLog(__METHOD__, '', " " . "condition1 login pos2:" . json_encode($login));
-                $user = UserManager::getByIdWithToken($login->user_id);
-                //补全登录信息
-                self::setLoginXCX($user->id, $data);
-                return $user;
-            }
-        }
-        //第二步，入参是否有openid信息，如果有，则通过openid判断用户，平台中是否已有用户信息
-        if (array_key_exists('openid', $data)) {
-            $con_arr = array(
-                've_value1' => $data['openid']
-            );
-            $login = LoginManager::getListByCon($con_arr, false)->first();  //根据unionid获取登录信息
-            Utils::processLog(__METHOD__, '', " " . "condition2 login pos1:" . json_encode($login));
-            //如果已经有用户信息，则获取用户信息，并进行登录信息补全，返回用户信息
-            if ($login) {
-                Utils::processLog(__METHOD__, '', " " . "condition2 login pos2:" . json_encode($login));
-                $user = UserManager::getByIdWithToken($login->user_id);
-                //补全登录信息
-                self::setLoginXCX($login->user_id, $data);
-                return $user;
-            }
-        }
-        //第三步，如果均未返回用户信息，则代表需要新注册用户
-        //注册用户
-        $user = new User();
-        $user = UserManager::setInfo($user, $data);
-        $user->token = UserManager::getGUID();
-        $user->save();
-
-        //如果是新注册用户，则给一个new_flag==true//////////////////////////////////////////////////
-        $user->new_flag = true;
-        //new_flag是新用户标识，主要标识用户信息////////////////////////////////////////////////////
-
-        Utils::processLog(__METHOD__, '', " " . "user:" . json_encode($user));
-        //补全登录信息
-        $login = self::setLoginXCX($user->id, $data);
-        Utils::processLog(__METHOD__, '', " " . "condition3 login:" . json_encode($login));
-        return $user;
-    }
-
-    /*
-     * 小程序补全登录信息，主要解决uniond、openid等缺失的问题
-     *
-     * By TerryQi
-     *
-     * 2018-07-03
-     *
-     * $data中应有busi_name、openid、unionid，分别映射login表中的busi_name、ve_value1、ve_value2
-     *
-     * $user_id为用户id，因此需要注册成功再处理绑定关系
-     *
-     * return false：失败 true：成功
-     *
-     */
-    public static function setLoginXCX($user_id, $data)
-    {
-        Utils::processLog(__METHOD__, '', " " . "user_id:" . $user_id . " data:" . json_encode($data));
-        //user_id如果为空不能往下走
-        if (Utils::isObjNull($user_id)) {
-            return null;
-        }
-        //获取基本信息
-        $busi_name = $data['busi_name'];    //业务名
-        $openid = $data['openid'];      //openid
-        $unionid = null;        //unionid
-        if (array_key_exists('unionid', $data)) {
-            $unionid = $data['unionid'];        //unionid
-        }
-        //根据openid获取用户信息
-        $con_arr = array(
-            've_value1' => $openid
-        );
-        $login = LoginManager::getListByCon($con_arr, false)->first();
-        Utils::processLog(__METHOD__, '', " " . "login:" . json_encode($login));
-        //如果有值，就进行信息补全
-        if (!$login) {
-            Utils::processLog(__METHOD__, '', " " . "不存在login，则新建login信息");
-            $login = new Login();
-        }
-        $login->user_id = $user_id;
-        $login->account_type = Utils::ACCOUNT_TYPE_XCX;
-        $login->busi_name = $busi_name;
-        $login->ve_value1 = $openid;
-        $login->ve_value2 = $unionid;
-        $login->save();
-
-        Utils::processLog(__METHOD__, '', " " . "login:" . json_encode($login));
-
-        return $login;
-    }
-
-
-    /*
-     * 将服务号web.auth的用户数据转为$data形式
-     *
-     * By TerryQi
-     *
-     * 2018-07-18
-     */
-    public static function convertFWHDataToData($original_user)
-    {
-        if (!array_key_exists('openid', $original_user) || Utils::isObjNull($original_user['openid'])) {
-            return null;
-        }
-
-        $data = array(
-            "openid" => $original_user['openid'],
-            'nick_name' => $original_user['nickname'],
-            'gender' => $original_user['sex'],
-            'language' => $original_user['language'],
-            'avatar' => $original_user['headimgurl'],
-            'country' => $original_user['country'],
-            'province' => $original_user['province'],
-            'city' => $original_user['city'],
-            'busi_name' => $original_user['busi_name']
-        );
-        if (array_key_exists('unionid', $original_user)) {
-            $data['unionid'] = $original_user['unionid'];
-        }
-        return $data;
-    }
-
-
-    /*
-     * 将服务号的session_val转换为user_data数组数据
-     *
-     * By TerryQi
-     *
-     * 2018-07-18
-     */
-    public static function convertSessionValToUserData($session_val, $busi_name)
-    {
-        //获取用户相关信息
-        Utils::processLog(__METHOD__, '', " session_val : " . json_encode($session_val));
-        $user_val = $session_val['default']->toArray();
-
-        Utils::processLog(__METHOD__, '', "user_val:" . json_encode($user_val));
-        $original_user = $user_val['original']; //获取用户基本信息
-        $original_user['busi_name'] = $busi_name;
-        //封装数据
-        $user_data = self::convertFWHDataToData($original_user);
-        return $user_data;
-    }
-
-
-    /*
-     * 将小程序的消息解密的数据返回至前端
-     *
-     * By TerryQi
-     *
-     * 2018-11-22
-     */
-    public static function convertDecryptDatatoUserData($decrytData)
-    {
-        $data = array(
-            'openid' => $decrytData['openId'],
-            'nick_name' => $decrytData['nickName'],
-            'gender' => $decrytData['gender'],
-            'language' => $decrytData['language'],
-            'city' => $decrytData['city'],
-            'province' => $decrytData['province'],
-            'country' => $decrytData['country'],
-            'avatar' => $decrytData['avatarUrl'],
-            'unionid' => $decrytData['unionId']
-        );
-        return $data;
-    }
-
-
-    /*
-     * 业务统计数据
-     *
-     * By TerryQi
-     *
-     * 2018-08-14
-     */
-    public static function addStatistics($user_id, $item, $num)
-    {
-        $user = self::getByIdWithToken($user_id);
-        switch ($item) {
-            case "yq_num":
-                $user->yq_num = $user->yq_num + $num;
-                break;
-            case "rel_num":
-                $user->rel_num = $user->rel_num + $num;
-                break;
-        }
-        $user->save();
-    }
-
-
-    /*
      * 进行消息解密
      *
      * By TerryQi
@@ -687,16 +319,26 @@ class UserManager
 
 
     /*
-     * 随机获取头像数据
+     * 将小程序的消息解密的数据返回至前端
      *
      * By TerryQi
      *
-     * 2018-12-28
+     * 2018-11-22
      */
-    public static function getRandomAvatar()
+    public static function convertDecryptDatatoUserData($decrytData)
     {
-        $avatar_url = Utils::AVATAR_ARR[rand(0, count(Utils::AVATAR_ARR) - 1)];
-        return $avatar_url;
+        $data = array(
+            'xcx_openid' => $decrytData['openId'],
+            'nick_name' => $decrytData['nickName'],
+            'gender' => $decrytData['gender'],
+            'language' => $decrytData['language'],
+            'city' => $decrytData['city'],
+            'province' => $decrytData['province'],
+            'country' => $decrytData['country'],
+            'avatar' => $decrytData['avatarUrl'],
+            'unionid' => $decrytData['unionId']
+        );
+        return $data;
     }
 
 }

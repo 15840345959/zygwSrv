@@ -73,7 +73,7 @@ class TWController
 //        $tw=TWManager::getById($data['id']);
         $tw = TWManager::getListByCon(['type' => $data['type']], false)->first();
         if ($tw) {
-            $tw = TWManager::getInfoByLevel($tw);
+            $tw = TWManager::getInfoByLevel($tw, '');
         }
         return ApiResponse::makeResponse(true, $tw, ApiResponse::SUCCESS_CODE);
     }

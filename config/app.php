@@ -182,6 +182,7 @@ return [
         Overtrue\LaravelFilesystem\Qiniu\QiniuStorageServiceProvider::class,
         Overtrue\LaravelUEditor\UEditorServiceProvider::class,
 
+        Overtrue\LaravelWeChat\ServiceProvider::class,
     ],
 
     /*
@@ -232,6 +233,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+
+        'EasyWeChat' => Overtrue\LaravelWeChat\Facade::class,
 
     ],
 

@@ -120,7 +120,7 @@ class HouseController
         //户型信息
         $huxings = HuxingManager::getListByCon(['house_id' => $house->id], false);
         foreach ($huxings as $huxing) {
-            $huxing = HuxingManager::getInfoByLevel($huxing, '01');
+            $huxing = HuxingManager::getInfoByLevel($huxing, '013');
         }
 
         //案场负责人信息

@@ -78,7 +78,7 @@ class HuxingController extends Controller
         );
 
         //根据条件搜索楼盘
-        $huxings = HuxingManager::getListByCon($con_arr, true);
+        $huxings = HuxingManager::getListByCon($con_arr, false);
         $level = "0";
         if (array_key_exists('level', $data)) {
             $level = $data['level'];
@@ -86,6 +86,6 @@ class HuxingController extends Controller
         foreach ($huxings as $huxing) {
             $huxing = HuxingManager::getInfoByLevel($huxing, $level);
         }
-        return ApiResponse::makeResponse(true, $huxing, ApiResponse::SUCCESS_CODE);
+        return ApiResponse::makeResponse(true, $huxings, ApiResponse::SUCCESS_CODE);
     }
 }

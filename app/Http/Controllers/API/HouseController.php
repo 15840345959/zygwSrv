@@ -67,18 +67,34 @@ class HouseController extends Controller
         $data = $request->all();
 
         $search_word = null;    //搜索条件
+        $type_id = null;    //类型
+        $label_id = null;       //标签
+        $area_id = null;        //地区
+
         if (array_key_exists('search_word', $data) && !Utils::isObjNull($data['search_word'])) {
             $search_word = $data['search_word'];
+        }
+        if (array_key_exists('type_id', $data) && !Utils::isObjNull($data['type_id'])) {
+            $type_id = $data['type_id'];
+        }
+        if (array_key_exists('area_id', $data) && !Utils::isObjNull($data['area_id'])) {
+            $area_id = $data['area_id'];
+        }
+        if (array_key_exists('label_id', $data) && !Utils::isObjNull($data['label_id'])) {
+            $label_id = $data['label_id'];
         }
 
         $con_arr = array(
             'search_word' => $search_word,
+            'type_id' => $type_id,
+            'label_id' => $label_id,
+            'area_id' => $area_id,
             'status' => '1'
         );
 
         //根据条件搜索楼盘
         $houses = HouseManager::getListByCon($con_arr, true);
-        $level = "02";
+        $level = "0";
         if (array_key_exists('level', $data)) {
             $level = $data['level'];
         }

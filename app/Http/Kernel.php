@@ -57,8 +57,12 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+
+        //自定义中间件
         'BeforeRequest' => \App\Http\Middleware\BeforeRequest::class,
         'CheckToken' => \App\Http\Middleware\CheckToken::class,
+        'CheckStatus' => \App\Http\Middleware\CheckStatus::class,
+        'CheckBaobeiStatus' => \App\Http\Middleware\CheckBaobeiStatus::class,
         'admin.login' => \App\Http\Middleware\CheckAdminLogin::class,//后台登录中间件
     ];
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20afa8098fbc2e683d6963a84ea5d557",
+    "content-hash": "ea1ad8edab8d926bbaed0d23902dcb46",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -479,6 +479,45 @@
                 "trusted proxy"
             ],
             "time": "2017-06-15T17:19:42+00:00"
+        },
+        {
+            "name": "frowhy/mini-program-aes",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/frowhy/mini-program-aes.git",
+                "reference": "0778343525d424c48c95cc406aeb53a9a0e5ff67"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/frowhy/mini-program-aes/zipball/0778343525d424c48c95cc406aeb53a9a0e5ff67",
+                "reference": "0778343525d424c48c95cc406aeb53a9a0e5ff67",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Leto\\MiniProgramAES\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "apache"
+            ],
+            "authors": [
+                {
+                    "name": "付广辉",
+                    "email": "frowhy@gmail.com"
+                }
+            ],
+            "description": "PHP 7.1 微信小程序加密解密算法",
+            "time": "2017-07-25T09:38:24+00:00"
         },
         {
             "name": "fzaninotto/faker",
@@ -1930,16 +1969,16 @@
         },
         {
             "name": "overtrue/laravel-wechat",
-            "version": "4.0.22",
+            "version": "4.0.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/overtrue/laravel-wechat.git",
-                "reference": "1d985af7c2d3b27ae5046dbdd3678172fd028490"
+                "reference": "64d424a9cb8ce82321f1d6e5a053c53e82afcb32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/overtrue/laravel-wechat/zipball/1d985af7c2d3b27ae5046dbdd3678172fd028490",
-                "reference": "1d985af7c2d3b27ae5046dbdd3678172fd028490",
+                "url": "https://api.github.com/repos/overtrue/laravel-wechat/zipball/64d424a9cb8ce82321f1d6e5a053c53e82afcb32",
+                "reference": "64d424a9cb8ce82321f1d6e5a053c53e82afcb32",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1985,7 +2024,7 @@
                 "wechat",
                 "weixin"
             ],
-            "time": "2018-05-23T14:03:58+00:00"
+            "time": "2019-03-01T10:43:18+00:00"
         },
         {
             "name": "overtrue/socialite",
