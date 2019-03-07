@@ -69,7 +69,7 @@
                     <ul>
                         <li><a data-href="{{ URL::asset('/admin/client/index') }}" data-title="客户管理"
                                href="javascript:void(0)">客户管理</a></li>
-                        <li><a data-href="" data-title="报备查询"
+                        <li><a data-href="{{ URL::asset('/admin/baobei/baobei/index') }}" data-title="报备查询"
                                href="javascript:void(0)">报备查询</a></li>
                     </ul>
                 </dd>

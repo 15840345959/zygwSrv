@@ -161,6 +161,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin.login']], function ()
     Route::post('/baobei/baobeiClientCare/edit', 'Admin\Baobei\BaobeiClientCareController@editPost');//新建或编辑购买目的
     Route::get('/baobei/baobeiClientCare/setStatus/{id}', 'Admin\Baobei\BaobeiClientCareController@setStatus');  //设置购买目的状态
 
+    Route::any('/baobei/baobei/index', 'Admin\Baobei\BaobeiController@index');  //报备首页
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////
 

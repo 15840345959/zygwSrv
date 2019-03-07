@@ -47,7 +47,7 @@ class HouseAreaManager
             $infos = $infos->where('status', '=', $con_arr['status']);
         }
 
-        $infos = $infos->orderby('id', 'desc');
+        $infos = $infos->orderby('seq', 'desc')->orderby('id', 'desc');
         if ($is_paginate) {
             $infos = $infos->paginate(Utils::PAGE_SIZE);
         } else {
@@ -71,6 +71,9 @@ class HouseAreaManager
         }
         if (array_key_exists('name', $data)) {
             $info->name = array_get($data, 'name');
+        }
+        if (array_key_exists('seq', $data)) {
+            $info->seq = array_get($data, 'seq');
         }
         return $info;
     }

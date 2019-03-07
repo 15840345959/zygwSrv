@@ -7,7 +7,7 @@
  * Time: 20:15
  */
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Baobei;
 
 use App\Components\ADManager;
 use App\Components\AdminManager;
@@ -36,133 +36,69 @@ class BaobeiController
 
         //报备状态条件
         $baobei_status = null;
+        $can_jiesuan_status = null;
+        $pay_zhongjie_status = null;
+        $status = null;
+        $search_word = null;
+
         if (array_key_exists('baobei_status', $data)) {
             $baobei_status = $data['baobei_status'];
         }
-        //是否可以结算条件
-        $can_jiesuan_status = null;
         if (array_key_exists('can_jiesuan_status', $data)) {
             $can_jiesuan_status = $data['can_jiesuan_status'];
         }
-        //是否已经结算条件
-        $pay_zhongjie_status = null;
         if (array_key_exists('pay_zhongjie_status', $data)) {
             $pay_zhongjie_status = $data['pay_zhongjie_status'];
         }
-        //trade_no
-        $trade_no = null;
-        if (array_key_exists('trade_no', $data)) {
-            $trade_no = $data['trade_no'];
+        if (array_key_exists('status', $data)) {
+            $status = $data['status'];
         }
-        $datas = BaobeiManager::getListByStatusPaginate($baobei_status, $can_jiesuan_status, $pay_zhongjie_status, $trade_no);
-        foreach ($datas as $data) {
-            $data = BaobeiManager::getInfoByLevel($data, "0");
+        if (array_key_exists('search_word', $data)) {
+            $search_word = $data['search_word'];
         }
-        //获取统计信息
-        $stmt = new Collection([
-            'all_nums' => BaobeiManager::getListByStatus(null, null, null, null, null, null)->count(),
-            'baobei_status0' => BaobeiManager::getListByStatus('0', null, null, null, null, null)->count(),
-            'baobei_status1' => BaobeiManager::getListByStatus('1', null, null, null, null, null)->count(),
-            'baobei_status2' => BaobeiManager::getListByStatus('2', null, null, null, null, null)->count(),
-            'baobei_status3' => BaobeiManager::getListByStatus('3', null, null, null, null, null)->count(),
-            'baobei_status4' => BaobeiManager::getListByStatus('4', null, null, null, null, null)->count(),
-            'can_jiesuan_status1' => BaobeiManager::getListByStatus(null, '1', null, null, null, null)->count(),
-            'pay_zhongjie_status1' => BaobeiManager::getListByStatus(null, null, '1', null, null, null)->count(),
-        ]);
+
+        $con_arr = array(
+            'search_word' => $search_word,
+            'status' => $status,
+            'baobei_status' => $baobei_status,
+            'pay_zhongjie_status' => $pay_zhongjie_status,
+            'can_jiesuan_status' => $can_jiesuan_status,
+        );
+
+        $baobeis = BaobeiManager::getListByCon($con_arr, true);
+        foreach ($baobeis as $baobei) {
+            $baobei = BaobeiManager::getInfoByLevel($baobei, "02");
+        }
 //        dd($stmt);
-        return view('admin.baobei.index', ['admin' => $admin, 'stmt' => $stmt, 'datas' => $datas]);
+        return view('admin.baobei.baobei.index', ['admin' => $admin, 'con_arr' => $con_arr, 'datas' => $baobeis]);
     }
 
-    //报备详情信息
+
+    /*
+    * 报备信息-get
+    *
+    * By mtt
+    *
+    * 2018-4-9
+    */
     public function info(Request $request)
     {
         $data = $request->all();
         $admin = $request->session()->get('admin');
-        //合规校验
+
         $requestValidationResult = RequestValidator::validator($request->all(), [
             'id' => 'required',
         ]);
-        if ($requestValidationResult !== true) {
-            return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '合规校验失败，请检查参数' . $requestValidationResult]);
+        if (!$requestValidationResult) {
+            return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '合规校验失败，请检查参数id$id']);
         }
+
+        //生成七牛token
+        $upload_token = QNManager::uploadToken();
         $baobei = BaobeiManager::getById($data['id']);
-        if ($baobei) {
-            $baobei = BaobeiManager::getInfoByLevel($baobei, "0");
-        }
-//        dd($baobei);
-        return view('admin.baobei.info', ['admin' => $admin, 'data' => $baobei]);
+        $baobei = BaobeiManager::getInfoByLevel($baobei, '0123');
+
+        return view('admin.baobei.baobei.info', ['admin' => $admin, 'data' => $baobei, 'upload_token' => $upload_token]);
     }
-
-    //重新设置交易信息
-    public function resetDealInfo(Request $request)
-    {
-        $data = $request->all();
-        $admin = $request->session()->get('admin');
-        //合规校验
-        $requestValidationResult = RequestValidator::validator($request->all(), [
-            'id' => 'required',
-        ]);
-        if ($requestValidationResult !== true) {
-            return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '合规校验失败，请检查参数' . $requestValidationResult]);
-        }
-        //如果非根级管理员，则不可以修改交易信息
-        if ($admin->role != '1') {
-            return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '权限错误，只有根级管理员可以修改报备交易信息']);
-        }
-        $baobei = BaobeiManager::getById($data['id']);
-        if ($baobei->pay_zhongjie_status == '1') {
-            return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '状态错误，只有未结算的报备单可以修改交易信息']);
-        }
-        //获取产品列表
-        $huxings = HuxingManager::getListByHouseId($baobei->house_id);
-        $pay_ways = BaobeiPayWayManager::getListValid();
-
-        return view('admin.baobei.resetDealInfo', ['admin' => $admin, 'data' => $baobei, 'huxings' => $huxings, 'pay_ways' => $pay_ways]);
-
-    }
-
-
-    //重新设置交易佣金
-    public function resetDealInfoPost(Request $request)
-    {
-        $data = $request->all();
-        $admin = $request->session()->get('admin');
-        //合规校验
-        $requestValidationResult = RequestValidator::validator($request->all(), [
-            'id' => 'required',
-            'deal_size' => 'required',
-            'deal_room' => 'required',
-            'deal_price' => 'required',
-            'deal_huxing_id' => 'required',
-            'pay_way_id' => 'required',
-        ]);
-        if ($requestValidationResult !== true) {
-            return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '合规校验失败，请检查参数' . $requestValidationResult]);
-        }
-        //报备信息
-        $baobei = BaobeiManager::getById($data['id']);
-        $baobei = BaobeiManager::setBaoBei($baobei, $data);
-        $huxing = HuxingManager::getById($data['deal_huxing_id']);
-        $yongjin = 0;
-        //获取佣金金额
-        if ($huxing->yongjin_type == '0') { //固定金额
-            $yongjin = $huxing->yongjin_value;
-        }
-        if ($huxing->yongjin_type == "1") {
-            $yongjin = $huxing->yongjin_value * $data['deal_price'] / 1000; //成交额千分比
-        }
-        $baobei->yongjin = $yongjin;
-        $baobei->save();
-        //记录修改信息
-        $resetDealInfoRecord = new ResetDealInfoRecord();
-        $resetDealInfoRecord->baobei_id = $baobei->id;
-        $resetDealInfoRecord->admin_id = $admin->id;
-        $resetDealInfoRecord->desc = "报备单变更为(" . $data['deal_huxing_id'] . "):" . $huxing->name .
-            " 成交面积:" . $data['deal_size'] . " 成交房号:" . $data['deal_room'] . " 成交金额:" . $data['deal_price'] . " 支付方式:" . $data['pay_way_id'];
-        $resetDealInfoRecord->save();
-
-        return redirect('/admin/baobei/info?id=' . $baobei->id);
-    }
-
 
 }

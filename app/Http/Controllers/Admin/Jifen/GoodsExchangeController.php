@@ -69,7 +69,7 @@ class GoodsExchangeController
         $admin = $request->session()->get('admin');
 
         if (is_numeric($id) !== true) {
-            return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '合规校验失败，请检查参数轮播图id$id']);
+            return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '合规校验失败，请检查参数id$id']);
         }
         $goodsExchange = GoodsExchangeManager::getById($data['id']);
         $goodsExchange->status = $data['status'];

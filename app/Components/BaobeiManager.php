@@ -68,10 +68,15 @@ class BaobeiManager
      *
      * 2018-02-04
      *
-     * 0 带客户信息 1：带中介信息 3：带楼盘信息
+     * 0 带客户信息 1：带中介信息 2：带楼盘信息
      */
     public static function getInfoByLevel($baobei, $level)
     {
+        $baobei->status_str = Value::COMMON_STATUS_VAL[$baobei->status];
+        $baobei->baobei_status_str = Value::BAOBEI_STATUS_VAL[$baobei->baobei_status];
+        $baobei->pay_zhongjie_status_str = Value::BAOBEI_PAY_ZHONGJIE_STATUS_VAL[$baobei->pay_zhongjie_status];
+        $baobei->can_jiesuan_status_str = Value::BAOBEI_CAN_JIESUAN_STATUS_VAL[$baobei->can_jiesuan_status];
+
         //0：带客户信息
         if (strpos($level, '0') !== false) {
             $baobei->client = ClientManager::getById($baobei->client_id);
@@ -81,12 +86,12 @@ class BaobeiManager
             $baobei->user = UserManager::getById($baobei->user_id);
         }
         //2：带楼盘信息
-        if (strpos($level, '1') !== false) {
+        if (strpos($level, '2') !== false) {
             $house = HouseManager::getById($baobei->house_id);
             unset($house->content_html);
             $baobei->house = $house;
         }
-        //案场负责人
+
         if (!Utils::isObjNull($baobei->anchang_id)) {
             $baobei->anchang = UserManager::getById($baobei->anchang_id);
         }

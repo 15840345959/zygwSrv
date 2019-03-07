@@ -48,7 +48,7 @@ class Value
     const GOODS_EXCHANGE_STATUS_VAL = ['0' => '未兑付', '1' => '已兑付'];
 
     //报备相关
-    const BAOBEI_STATUS_VAL_STR = ['0' => '报备', '1' => '到访', '2' => '成交', '3' => '签约', '4' => '全款到账'];
+    const BAOBEI_STATUS_VAL = ['0' => '报备', '1' => '到访', '2' => '成交', '3' => '签约', '4' => '全款到账'];
     const BAOBEI_CAN_JIESUAN_STATUS_VAL = ['0' => '不可结算', '1' => '可以结算'];
     const BAOBEI_PAY_ZHONGJIE_STATUS_VAL = ['0' => '未支付', '1' => '已支付'];
     const BAOBEI_VISIT_WAY_STATUS_VAL = ['0' => '中介带访', '1' => '自行到访'];

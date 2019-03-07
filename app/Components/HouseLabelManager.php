@@ -50,7 +50,7 @@ class HouselabelManager
             $infos = $infos->wherein('id', $con_arr['ids_arr']);
         }
 
-        $infos = $infos->orderby('id', 'desc');
+        $infos = $infos->orderby('seq', 'desc')->orderby('id', 'desc');
         if ($is_paginate) {
             $infos = $infos->paginate(Utils::PAGE_SIZE);
         } else {
@@ -74,6 +74,9 @@ class HouselabelManager
         }
         if (array_key_exists('name', $data)) {
             $info->name = array_get($data, 'name');
+        }
+        if (array_key_exists('seq', $data)) {
+            $info->seq = array_get($data, 'seq');
         }
         return $info;
     }

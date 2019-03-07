@@ -51,6 +51,7 @@
                     {{--<th width="25"><input type="checkbox" name="" value=""></th>--}}
                     <th width="40">ID</th>
                     <th width="100">名称</th>
+                    <th width="20">排序</th>
                     <th width="50">录入人</th>
                     <th width="50">状态</th>
                     <th width="60">创建时间</th>
@@ -63,6 +64,7 @@
                         {{--<td><input type="checkbox" value="1" name=""></td>--}}
                         <td>{{$data->id}}</td>
                         <td>{{$data->name}}</td>
+                        <td>{{$data->seq}}</td>
                         <td>{{isset($data->admin)?$data->admin->name:'--'}}</td>
                         <td>
                             <span class="c-primary">{{$data->status_str}}</span>

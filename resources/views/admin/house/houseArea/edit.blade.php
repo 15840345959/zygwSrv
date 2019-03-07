@@ -19,6 +19,14 @@
                            value="{{ isset($data->name) ? $data->name : '' }}" placeholder="请输入楼盘区域标题">
                 </div>
             </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>排序：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input id="seq" name="seq" type="number" class="input-text"
+                           value="{{ isset($data->seq) ? $data->seq : 0 }}" placeholder="请输入排序,越大越靠前"
+                           style="width: 400px;">
+                </div>
+            </div>
             <div class="row cl" style="padding-top: 20px;">
                 <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
                     <input class="btn btn-primary radius" type="submit" value="保存楼盘区域">
