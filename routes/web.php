@@ -162,7 +162,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin.login']], function ()
     Route::get('/baobei/baobeiClientCare/setStatus/{id}', 'Admin\Baobei\BaobeiClientCareController@setStatus');  //设置购买目的状态
 
     Route::any('/baobei/baobei/index', 'Admin\Baobei\BaobeiController@index');  //报备首页
-
+    Route::get('/baobei/baobei/info', 'Admin\Baobei\BaobeiController@info');  //报备信息
+    Route::get('/baobei/baobei/payZhongjie', 'Admin\Baobei\BaobeiController@payZhongjie');  //中介结算
+    Route::post('/baobei/baobei/payZhongjie', 'Admin\Baobei\BaobeiController@payZhongjiePost');  //中介结算-post
+    Route::get('/baobei/baobei/resetDealInfo', 'Admin\Baobei\BaobeiController@resetDealInfo');  //重设成交信息
+    Route::post('/baobei/baobei/resetDealInfo', 'Admin\Baobei\BaobeiController@resetDealInfoPost');  //重设成交信息-post
 
     ////////////////////////////////////////////////////////////////////////////////////////////
 

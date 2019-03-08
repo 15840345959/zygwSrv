@@ -42,6 +42,7 @@ class AdminManager
         //如果获取管理员信息
         if ($admin) {
             unset($admin->token);
+            unset($admin->password);
         }
         return $admin;
     }

@@ -37,14 +37,14 @@ class BaobeiManager
         $client_cares = BaobeiClientCareManager::getListByCon(['status' => '1'], false);
         $areas = HouseAreaManager::getListByCon(['status' => '1'], false);
 
-        $baobeiOption = new Collection([
+        $infoOption = new Collection([
             'pay_ways' => $pay_ways,
             'buy_purposes' => $buy_purposes,
             'know_ways' => $know_ways,
             'client_cares' => $client_cares,
             'areas' => $areas,
         ]);
-        return $baobeiOption;
+        return $infoOption;
     }
 
 
@@ -57,8 +57,8 @@ class BaobeiManager
      */
     public static function getById($id)
     {
-        $baobei = Baobei::find($id);
-        return $baobei;
+        $info = Baobei::find($id);
+        return $info;
     }
 
     /*
@@ -70,64 +70,76 @@ class BaobeiManager
      *
      * 0 带客户信息 1：带中介信息 2：带楼盘信息
      */
-    public static function getInfoByLevel($baobei, $level)
+    public static function getInfoByLevel($info, $level)
     {
-        $baobei->status_str = Value::COMMON_STATUS_VAL[$baobei->status];
-        $baobei->baobei_status_str = Value::BAOBEI_STATUS_VAL[$baobei->baobei_status];
-        $baobei->pay_zhongjie_status_str = Value::BAOBEI_PAY_ZHONGJIE_STATUS_VAL[$baobei->pay_zhongjie_status];
-        $baobei->can_jiesuan_status_str = Value::BAOBEI_CAN_JIESUAN_STATUS_VAL[$baobei->can_jiesuan_status];
+        Utils::processLog(__METHOD__, '', " " . "info:" . json_encode($info));
+
+        $info->status_str = Value::COMMON_STATUS_VAL[$info->status];
+
+        $info->baobei_status_str = Value::BAOBEI_STATUS_VAL[$info->baobei_status];
+        $info->pay_zhongjie_status_str = Value::BAOBEI_PAY_ZHONGJIE_STATUS_VAL[$info->pay_zhongjie_status];
+        $info->can_jiesuan_status_str = Value::BAOBEI_CAN_JIESUAN_STATUS_VAL[$info->can_jiesuan_status];
+        $info->intention_status_str = Value::BAOBEI_INTENTION_STATUS_VAL[$info->intention_status];
+        $info->visit_way_str = Value::BAOBEI_VISIT_WAY_VAL[$info->visit_way];
 
         //0：带客户信息
         if (strpos($level, '0') !== false) {
-            $baobei->client = ClientManager::getById($baobei->client_id);
+            $info->client = ClientManager::getById($info->client_id);
         }
         //1：带中介信息
         if (strpos($level, '1') !== false) {
-            $baobei->user = UserManager::getById($baobei->user_id);
+            $user = UserManager::getById($info->user_id);
+            $user = UserManager::getInfoByLevel($user, '');
+            $info->user = $user;
         }
         //2：带楼盘信息
         if (strpos($level, '2') !== false) {
-            $house = HouseManager::getById($baobei->house_id);
+            $house = HouseManager::getById($info->house_id);
+            $house = HouseManager::getInfoByLevel($house, '');
             unset($house->content_html);
-            $baobei->house = $house;
+            $info->house = $house;
         }
 
-        if (!Utils::isObjNull($baobei->anchang_id)) {
-            $baobei->anchang = UserManager::getById($baobei->anchang_id);
+        if (!Utils::isObjNull($info->anchang_id)) {
+            $anchang = UserManager::getById($info->anchang_id);
+            $anchang = UserManager::getInfoByLevel($anchang, '');
+            $info->anchang = $anchang;
         }
         //置业顾问
-        if (!Utils::isObjNull($baobei->guwen_id)) {
-            $baobei->guwen = ZYGWManager::getById($baobei->guwen_id);
+        if (!Utils::isObjNull($info->guwen_id)) {
+            $info->guwen = ZYGWManager::getById($info->guwen_id);
         }
         //区域
-        if (!Utils::isObjNull($baobei->area_id)) {
-            $baobei->area = HouseAreaManager::getById($baobei->area_id);
+        if (!Utils::isObjNull($info->area_id)) {
+            $info->area = HouseAreaManager::getById($info->area_id);
         }
         //认知途径
-        if (!Utils::isObjNull($baobei->way_id)) {
-            $baobei->know_way = BaobeiKnowWayManager::getById($baobei->way_id);
+        if (!Utils::isObjNull($info->way_id)) {
+            $info->know_way = BaobeiKnowWayManager::getById($info->way_id);
         }
         //购房目的
-        if (!Utils::isObjNull($baobei->purpose_id)) {
-            $baobei->purpose = BaobeiBuyPurposeManager::getById($baobei->purpose_id);
+        if (!Utils::isObjNull($info->purpose_id)) {
+            $info->purpose = BaobeiBuyPurposeManager::getById($info->purpose_id);
         }
         //关注点
-        if (!Utils::isObjNull($baobei->care_id)) {
-            $baobei->care = BaobeiClientCareManager::getById($baobei->care_id);
+        if (!Utils::isObjNull($info->care_id)) {
+            $info->care = BaobeiClientCareManager::getById($info->care_id);
         }
         //产品信息
-        if (!Utils::isObjNull($baobei->deal_huxing_id)) {
-            $baobei->deal_huxing = HuxingManager::getById($baobei->deal_huxing_id);
+        if (!Utils::isObjNull($info->deal_huxing_id)) {
+            $deal_huxing = HuxingManager::getById($info->deal_huxing_id);
+            $deal_huxing = HuxingManager::getInfoByLevel($deal_huxing, '');
+            $info->deal_huxing = $deal_huxing;
         }
         //支付方式
-        if (!Utils::isObjNull($baobei->pay_way_id)) {
-            $baobei->pay_way = BaobeiPayWayManager::getById($baobei->pay_way_id);
+        if (!Utils::isObjNull($info->pay_way_id)) {
+            $info->pay_way = BaobeiPayWayManager::getById($info->pay_way_id);
         }
         //支付中介的管理员
-        if (!Utils::isObjNull($baobei->pay_admin_id)) {
-            $baobei->admin = AdminManager::getAdminInfoById($baobei->pay_admin_id);
+        if (!Utils::isObjNull($info->pay_admin_id)) {
+            $info->admin = AdminManager::getById($info->pay_admin_id);
         }
-        return $baobei;
+        return $info;
     }
 
     /*
@@ -139,8 +151,8 @@ class BaobeiManager
      */
     public static function isClientAlreadyBaobeiByHouseId($client_id, $house_id)
     {
-        $baobei = self::getListByCon(['status' => '1', 'client_id' => $client_id, 'house_id' => $house_id], false)->first();
-        return $baobei;
+        $info = self::getListByCon(['status' => '1', 'client_id' => $client_id, 'house_id' => $house_id], false)->first();
+        return $info;
     }
 
     /*获取全部的楼盘标签信息
@@ -333,28 +345,28 @@ class BaobeiManager
        * 2018-02-28
        *
        */
-    public static function getBaobeiStmtByStatus($baobei_status_arr, $can_jiesuan_status_arr, $pay_zhongjie_status_arr, $house_id, $start_time, $end_time)
+    public static function getBaobeiStmtByStatus($info_status_arr, $can_jiesuan_status_arr, $pay_zhongjie_status_arr, $house_id, $start_time, $end_time)
     {
-        $baobeis = Baobei::wherein('status', ['0', '1']);
-        if ($baobei_status_arr != null) {
-            $baobeis = $baobeis->wherein('baobei_status', $baobei_status_arr);
+        $infos = Baobei::wherein('status', ['0', '1']);
+        if ($info_status_arr != null) {
+            $infos = $infos->wherein('baobei_status', $info_status_arr);
         }
         if ($can_jiesuan_status_arr != null) {
-            $baobeis = $baobeis->wherein('can_jiesuan_status', $can_jiesuan_status_arr);
+            $infos = $infos->wherein('can_jiesuan_status', $can_jiesuan_status_arr);
         }
         if ($pay_zhongjie_status_arr != null) {
-            $baobeis = $baobeis->wherein('pay_zhongjie_status', $pay_zhongjie_status_arr);
+            $infos = $infos->wherein('pay_zhongjie_status', $pay_zhongjie_status_arr);
         }
         if ($house_id != null) {
-            $baobeis = $baobeis->where('house_id', '=', $house_id);
+            $infos = $infos->where('house_id', '=', $house_id);
         }
         if ($start_time != null) {
-            $baobeis = $baobeis->where('created_at', '>=', $start_time);
+            $infos = $infos->where('created_at', '>=', $start_time);
         }
         if ($end_time != null) {
-            $baobeis = $baobeis->where('created_at', '<', $end_time);
+            $infos = $infos->where('created_at', '<', $end_time);
         }
-        $count = $baobeis->orderby('id', 'desc')->count();
+        $count = $infos->orderby('id', 'desc')->count();
         return $count;
     }
 
@@ -550,28 +562,28 @@ class BaobeiManager
     * 2018-02-28
     *
     */
-    public static function getYongjinStmtByStatus($baobei_status_arr, $can_jiesuan_status_arr, $pay_zhongjie_status_arr, $house_id, $start_time, $end_time)
+    public static function getYongjinStmtByStatus($info_status_arr, $can_jiesuan_status_arr, $pay_zhongjie_status_arr, $house_id, $start_time, $end_time)
     {
-        $baobeis = Baobei::wherein('status', ['0', '1']);
-        if ($baobei_status_arr != null) {
-            $baobeis = $baobeis->wherein('baobei_status', $baobei_status_arr);
+        $infos = Baobei::wherein('status', ['0', '1']);
+        if ($info_status_arr != null) {
+            $infos = $infos->wherein('baobei_status', $info_status_arr);
         }
         if ($can_jiesuan_status_arr != null) {
-            $baobeis = $baobeis->wherein('can_jiesuan_status', $can_jiesuan_status_arr);
+            $infos = $infos->wherein('can_jiesuan_status', $can_jiesuan_status_arr);
         }
         if ($pay_zhongjie_status_arr != null) {
-            $baobeis = $baobeis->wherein('pay_zhongjie_status', $pay_zhongjie_status_arr);
+            $infos = $infos->wherein('pay_zhongjie_status', $pay_zhongjie_status_arr);
         }
         if ($house_id != null) {
-            $baobeis = $baobeis->where('house_id', '=', $house_id);
+            $infos = $infos->where('house_id', '=', $house_id);
         }
         if ($start_time != null) {
-            $baobeis = $baobeis->where('created_at', '>', $start_time);
+            $infos = $infos->where('created_at', '>', $start_time);
         }
         if ($end_time != null) {
-            $baobeis = $baobeis->where('created_at', '<=', $end_time);
+            $infos = $infos->where('created_at', '<=', $end_time);
         }
-        $yongjin = $baobeis->orderby('id', 'desc')->sum('yongjin');
+        $yongjin = $infos->orderby('id', 'desc')->sum('yongjin');
         return $yongjin;
     }
 
@@ -583,8 +595,8 @@ class BaobeiManager
     public static function getAllBaobeiExceedList()
     {
         $curr = DateTool::getCurrentTime();
-        $baobeis = Baobei::where('status', '=', '1')->where('baobei_status', '=', '0')->where('created_at', '<', $curr)->get();
-        return $baobeis;
+        $infos = Baobei::where('status', '=', '1')->where('baobei_status', '=', '0')->where('created_at', '<', $curr)->get();
+        return $infos;
     }
 
     //计划任务，获取全部的超期成交数据
@@ -598,8 +610,8 @@ class BaobeiManager
         $curr = DateTool::getCurrentTime();
         $exceed_date = DateTool::dateAdd('D', -30, $curr, null);
 //        dd($exceed_date);
-        $baobeis = Baobei::where('status', '=', '1')->where('baobei_status', '=', '1')->where('visit_time', '<', $exceed_date)->get();
-        return $baobeis;
+        $infos = Baobei::where('status', '=', '1')->where('baobei_status', '=', '1')->where('visit_time', '<', $exceed_date)->get();
+        return $infos;
     }
 
 

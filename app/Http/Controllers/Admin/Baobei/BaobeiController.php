@@ -16,6 +16,7 @@ use App\Components\BaobeiPayWayManager;
 use App\Components\DateTool;
 use App\Components\HuxingManager;
 use App\Components\QNManager;
+use App\Http\Controllers\ApiResponse;
 use App\Libs\CommonUtils;
 use App\Models\ResetDealInfoRecord;
 use Illuminate\Http\Request;
@@ -40,6 +41,9 @@ class BaobeiController
         $pay_zhongjie_status = null;
         $status = null;
         $search_word = null;
+        $client_id = null;
+        $user_id = null;
+        $anchang_id = null;
 
         if (array_key_exists('baobei_status', $data)) {
             $baobei_status = $data['baobei_status'];
@@ -53,8 +57,14 @@ class BaobeiController
         if (array_key_exists('status', $data)) {
             $status = $data['status'];
         }
-        if (array_key_exists('search_word', $data)) {
-            $search_word = $data['search_word'];
+        if (array_key_exists('user_id', $data)) {
+            $user_id = $data['user_id'];
+        }
+        if (array_key_exists('client_id', $data)) {
+            $client_id = $data['client_id'];
+        }
+        if (array_key_exists('anchang_id', $data)) {
+            $anchang_id = $data['anchang_id'];
         }
 
         $con_arr = array(
@@ -63,11 +73,14 @@ class BaobeiController
             'baobei_status' => $baobei_status,
             'pay_zhongjie_status' => $pay_zhongjie_status,
             'can_jiesuan_status' => $can_jiesuan_status,
+            'user_id' => $user_id,
+            'anchang_id' => $anchang_id,
+            'client_id' => $client_id
         );
 
         $baobeis = BaobeiManager::getListByCon($con_arr, true);
         foreach ($baobeis as $baobei) {
-            $baobei = BaobeiManager::getInfoByLevel($baobei, "02");
+            $baobei = BaobeiManager::getInfoByLevel($baobei, "012");
         }
 //        dd($stmt);
         return view('admin.baobei.baobei.index', ['admin' => $admin, 'con_arr' => $con_arr, 'datas' => $baobeis]);
@@ -101,4 +114,157 @@ class BaobeiController
         return view('admin.baobei.baobei.info', ['admin' => $admin, 'data' => $baobei, 'upload_token' => $upload_token]);
     }
 
+
+    /*
+     * 中介结算
+     *
+     * By TerryQi
+     *
+     * 2019-03-07
+     *
+     */
+    public function payZhongjie(Request $request)
+    {
+        $data = $request->all();
+        $admin = $request->session()->get('admin');
+
+        $requestValidationResult = RequestValidator::validator($request->all(), [
+            'id' => 'required',
+        ]);
+        if (!$requestValidationResult) {
+            return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '合规校验失败，请检查参数id$id']);
+        }
+
+        //生成七牛token
+        $upload_token = QNManager::uploadToken();
+        $baobei = BaobeiManager::getById($data['id']);
+        $baobei = BaobeiManager::getInfoByLevel($baobei, '0123');
+
+        return view('admin.baobei.baobei.payZhongjie', ['admin' => $admin, 'data' => $baobei, 'upload_token' => $upload_token]);
+    }
+
+
+    /*
+     * 中介结算
+     *
+     * By TerryQi
+     *
+     * 2019-03-07
+     *
+     */
+    public function payZhongjiePost(Request $request)
+    {
+        $data = $request->all();
+        $admin = $request->session()->get('admin');
+
+        $requestValidationResult = RequestValidator::validator($request->all(), [
+            'id' => 'required',
+            'pay_zhongjie_attach' => 'required',
+        ]);
+        if (!$requestValidationResult) {
+            return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '合规校验失败，请检查参数id$id']);
+        }
+
+        $baobei = BaobeiManager::getById($data['id']);
+        //未找到报备信息
+        if (!$baobei) {
+            return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '合规校验失败，未找到报备单']);
+        }
+        //如果不符合结算条件
+        if (!($baobei->can_jiesuan_status == '1' && $baobei->pay_zhongjie_status == '0')) {
+            return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '报备单不符合结算条件']);
+        }
+
+        $baobei->pay_admin_id = $admin->id;
+        $baobei->pay_zhongjie_time = DateTool::getCurrentTime();
+        $baobei->pay_zhongjie_status = '1';
+        $baobei->pay_zhongjie_attach = $data['pay_zhongjie_attach'];
+        $baobei->save();
+
+        return ApiResponse::makeResponse(true, $baobei, ApiResponse::SUCCESS_CODE);
+    }
+
+
+    /*
+     * 重置交易信息
+     *
+     * By TerryQi
+     *
+     * 2019-03-08
+     *
+     */
+    public function resetDealInfo(Request $request)
+    {
+        $data = $request->all();
+        $admin = $request->session()->get('admin');
+
+        $requestValidationResult = RequestValidator::validator($request->all(), [
+            'id' => 'required',
+        ]);
+        if (!$requestValidationResult) {
+            return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '合规校验失败，请检查参数id$id']);
+        }
+
+        //生成七牛token
+        $upload_token = QNManager::uploadToken();
+        $baobei = BaobeiManager::getById($data['id']);
+        $baobei = BaobeiManager::getInfoByLevel($baobei, '0123');
+
+        //户型
+        $huxings = HuxingManager::getListByCon(['status' => '1', 'house_id' => $baobei->house_id], false);
+        //支付方式
+        $pay_ways = BaobeiPayWayManager::getListByCon(['status' => '1'], false);
+
+        return view('admin.baobei.baobei.resetDealInfo', ['admin' => $admin, 'data' => $baobei
+            , 'upload_token' => $upload_token, 'pay_ways' => $pay_ways, 'huxings' => $huxings]);
+    }
+
+    /*
+     * 调整交易信息
+     *
+     * By TerryQi
+     *
+     * 2019-03-08
+     */
+    public function resetDealInfoPost(Request $request)
+    {
+        $data = $request->all();
+        $admin = $request->session()->get('admin');
+        //合规校验
+        $requestValidationResult = RequestValidator::validator($request->all(), [
+            'id' => 'required',
+            'deal_size' => 'required',
+            'deal_room' => 'required',
+            'deal_price' => 'required',
+            'deal_huxing_id' => 'required',
+            'pay_way_id' => 'required',
+        ]);
+        if ($requestValidationResult !== true) {
+            return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '合规校验失败，请检查参数' . $requestValidationResult]);
+        }
+        //报备信息
+        $baobei = BaobeiManager::getById($data['id']);
+        $baobei = BaobeiManager::setInfo($baobei, $data);
+        $huxing = HuxingManager::getById($data['deal_huxing_id']);
+        $pay_way = BaobeiPayWayManager::getById($data['pay_way_id']);
+        $yongjin = 0;
+        //获取佣金金额
+        if ($huxing->yongjin_type == '0') { //固定金额
+            $yongjin = $huxing->yongjin_value;
+        }
+        if ($huxing->yongjin_type == "1") {
+            $yongjin = (double)($huxing->yongjin_value * $data['deal_price']) / 1000; //成交额千分比
+        }
+        $baobei->yongjin = $yongjin;
+        $baobei->save();
+        //记录修改信息
+        $resetDealInfoRecord = new ResetDealInfoRecord();
+        $resetDealInfoRecord->baobei_id = $baobei->id;
+        $resetDealInfoRecord->admin_id = $admin->id;
+        $resetDealInfoRecord->desc = "报备单变更为(" . $data['deal_huxing_id'] . "):" . $huxing->name .
+            " 成交面积:" . $data['deal_size'] . " 成交房号:" . $data['deal_room'] . " 成交金额:" . $data['deal_price'] . " 支付方式（" . $data['pay_way_id'] . "）:" . $pay_way->name;
+        $resetDealInfoRecord->save();
+
+        return ApiResponse::makeResponse(true, $baobei, ApiResponse::SUCCESS_CODE);
+    }
 }

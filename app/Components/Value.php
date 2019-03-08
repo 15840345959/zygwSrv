@@ -21,7 +21,7 @@ class Value
     const PAGE_SIZE = 15;
 
     //通用的status
-    const COMMON_STATUS_VAL = ['0' => '失效', '1' => '生效'];
+    const COMMON_STATUS_VAL = ['0' => '失效', '1' => '有效'];
 
     //管理员角色
     const ADMIN_ROLE_VAL = ['0' => '管理员', '1' => '超级管理员'];
@@ -32,6 +32,7 @@ class Value
 
     //人员角色
     const USER_TYPE_VAL = ['0' => '中介人员', '1' => '案场负责人'];
+    const USER_GENDER_VAL = ['0' => '保密', '1' => '男', '2' => '女'];
 
 
     //用户申请案场信息
@@ -51,6 +52,7 @@ class Value
     const BAOBEI_STATUS_VAL = ['0' => '报备', '1' => '到访', '2' => '成交', '3' => '签约', '4' => '全款到账'];
     const BAOBEI_CAN_JIESUAN_STATUS_VAL = ['0' => '不可结算', '1' => '可以结算'];
     const BAOBEI_PAY_ZHONGJIE_STATUS_VAL = ['0' => '未支付', '1' => '已支付'];
-    const BAOBEI_VISIT_WAY_STATUS_VAL = ['0' => '中介带访', '1' => '自行到访'];
+    const BAOBEI_VISIT_WAY_VAL = ['0' => '中介带访', '1' => '自行到访'];
+    const BAOBEI_INTENTION_STATUS_VAL = ['0' => '无意向', '1' => '有意向'];
 
 }

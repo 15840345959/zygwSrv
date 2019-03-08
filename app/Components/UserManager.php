@@ -57,9 +57,10 @@ class UserManager
      */
     public static function getInfoByLevel($info, $level)
     {
-//        dd($info);
+        Utils::processLog(__METHOD__, '', " " . "info:" . json_encode($info));
         $info->role_str = Value::USER_TYPE_VAL[$info->role];
         $info->status_str = Value::COMMON_STATUS_VAL[$info->status];
+        $info->gender_str = Value::USER_GENDER_VAL[$info->gender];
         return $info;
     }
 
