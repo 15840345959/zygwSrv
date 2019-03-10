@@ -187,7 +187,7 @@
         {{--报备单详情--}}
         <div class="mt-20">
             <div>
-                <h2>报备单进度（{{$data->baobei_status_str}}）</h2>
+                <h2>报备单进度（{{$data->baobei_status_str}}-{{$data->baobei_status+1}}/5）</h2>
             </div>
             <div class="mt-10">
                 <div class="progress">
@@ -316,7 +316,14 @@
                 </div>
             </div>
         @endif
+        {{--如果已经向中介结算--}}
         @if($data->baobei_status>=2&&$data->pay_zhongjie_status=='1')
+            {{----}}
+            <div class="mt-20">
+                <div>
+                    <h2>已经向中介结算</h2>
+                </div>
+            </div>
             <div class="mt-20">
                 <div class="panel panel-primary">
                     <div class="panel-header">
@@ -328,10 +335,48 @@
                             <span class="c-primary">{{$data->admin->name}}</span>
                         </div>
                         <div class="mt-10">
+                            佣金金额：
+                            <span class="c-primary">{{$data->yongjin}}元</span>
+                        </div>
+                        <div class="mt-10">
                             <img src="{{$data->pay_zhongjie_attach}}" style="width: 300px;">
                         </div>
                     </div>
                 </div>
+            </div>
+        @endif
+
+        @if(count($resetDealInfoRecords)>0)
+            <div class="mt-20">
+                <table class="table table-border table-bordered table-bg table-sort">
+                    <thead>
+                    <tr>
+                        <th scope="col" colspan="100">
+                            报备单修改记录
+                            <span class="r">共有数据：<strong>{{$resetDealInfoRecords->count()}}</strong> 条</span>
+                        </th>
+                    </tr>
+                    <tr class="text-c">
+                        {{--<th width="25"><input type="checkbox" name="" value=""></th>--}}
+                        <th width="20">ID</th>
+                        <th width="40">报备单</th>
+                        <th width="20">管理员</th>
+                        <th width="40">变更时间</th>
+                        <th width="200">变更内容</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($resetDealInfoRecords as $resetDealInfoRecord)
+                        <tr class="text-c">
+                            <td>{{$resetDealInfoRecord->id}}</td>
+                            <td><span class="c-primary">{{$resetDealInfoRecord->baobei->trade_no}}</span></td>
+                            <td>{{$resetDealInfoRecord->admin->name}}</td>
+                            <td>{{$resetDealInfoRecord->created_at}}</td>
+                            <td>{{$resetDealInfoRecord->desc}}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
             </div>
         @endif
     </div>
@@ -344,12 +389,6 @@
         $(function () {
 
         });
-
-
-        /*处理-报备单*/
-        function info(title, url) {
-            creatIframe(url, title)
-        }
 
     </script>
 @endsection

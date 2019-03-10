@@ -16,6 +16,7 @@ use App\Components\BaobeiPayWayManager;
 use App\Components\DateTool;
 use App\Components\HuxingManager;
 use App\Components\QNManager;
+use App\Components\ResetDealInfoRecordManager;
 use App\Http\Controllers\ApiResponse;
 use App\Libs\CommonUtils;
 use App\Models\ResetDealInfoRecord;
@@ -44,6 +45,8 @@ class BaobeiController
         $client_id = null;
         $user_id = null;
         $anchang_id = null;
+        $start_time = null;
+        $end_time = null;
 
         if (array_key_exists('baobei_status', $data)) {
             $baobei_status = $data['baobei_status'];
@@ -66,6 +69,12 @@ class BaobeiController
         if (array_key_exists('anchang_id', $data)) {
             $anchang_id = $data['anchang_id'];
         }
+        if (array_key_exists('start_time', $data)) {
+            $start_time = $data['start_time'];
+        }
+        if (array_key_exists('end_time', $data)) {
+            $end_time = $data['end_time'];
+        }
 
         $con_arr = array(
             'search_word' => $search_word,
@@ -75,7 +84,9 @@ class BaobeiController
             'can_jiesuan_status' => $can_jiesuan_status,
             'user_id' => $user_id,
             'anchang_id' => $anchang_id,
-            'client_id' => $client_id
+            'client_id' => $client_id,
+            'start_time' => $start_time,
+            'end_time' => $end_time
         );
 
         $baobeis = BaobeiManager::getListByCon($con_arr, true);
@@ -111,7 +122,14 @@ class BaobeiController
         $baobei = BaobeiManager::getById($data['id']);
         $baobei = BaobeiManager::getInfoByLevel($baobei, '0123');
 
-        return view('admin.baobei.baobei.info', ['admin' => $admin, 'data' => $baobei, 'upload_token' => $upload_token]);
+        //获取变更记录
+        $resetDealInfoRecords = ResetDealInfoRecordManager::getListByCon(['baobei_id' => $baobei->id], false);
+        foreach ($resetDealInfoRecords as $resetDealInfoRecord) {
+            $resetDealInfoRecord = ResetDealInfoRecordManager::getInfoByLevel($resetDealInfoRecord, '01');
+        }
+
+        return view('admin.baobei.baobei.info', ['admin' => $admin, 'data' => $baobei
+            , 'resetDealInfoRecords' => $resetDealInfoRecords, 'upload_token' => $upload_token]);
     }
 
 
@@ -246,6 +264,7 @@ class BaobeiController
         $baobei = BaobeiManager::getById($data['id']);
         $baobei = BaobeiManager::setInfo($baobei, $data);
         $huxing = HuxingManager::getById($data['deal_huxing_id']);
+        $huxing = HuxingManager::getInfoByLevel($huxing, '');
         $pay_way = BaobeiPayWayManager::getById($data['pay_way_id']);
         $yongjin = 0;
         //获取佣金金额
@@ -261,8 +280,8 @@ class BaobeiController
         $resetDealInfoRecord = new ResetDealInfoRecord();
         $resetDealInfoRecord->baobei_id = $baobei->id;
         $resetDealInfoRecord->admin_id = $admin->id;
-        $resetDealInfoRecord->desc = "报备单变更为(" . $data['deal_huxing_id'] . "):" . $huxing->name .
-            " 成交面积:" . $data['deal_size'] . " 成交房号:" . $data['deal_room'] . " 成交金额:" . $data['deal_price'] . " 支付方式（" . $data['pay_way_id'] . "）:" . $pay_way->name;
+        $resetDealInfoRecord->desc = "报备单变更为:   产品" . $huxing->name . "(" . $data['deal_huxing_id'] . ")" . $huxing->yongjin_type_str . " " . $huxing->yongjin_value_str .
+            "   成交面积:" . $data['deal_size'] . "     成交房号:" . $data['deal_room'] . "     成交金额:" . $data['deal_price'] . "    支付方式（" . $data['pay_way_id'] . "）:" . $pay_way->name;
         $resetDealInfoRecord->save();
 
         return ApiResponse::makeResponse(true, $baobei, ApiResponse::SUCCESS_CODE);
