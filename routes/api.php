@@ -31,7 +31,7 @@ Route::group(['prefix' => '', 'middleware' => ['BeforeRequest']], function () {
 
     //获取广告图
     Route::get('ad/getListByCon', 'API\ADController@getListByCon');    //获取首页轮播图
-    Route::get('ad/getById', 'API\ADController@getADById');     //根据轮播图的id获取相应的信息
+    Route::get('ad/getById', 'API\ADController@getById');     //根据轮播图的id获取相应的信息
 
     //用户签到-By TerryQi
     Route::post('user/userQDToday', 'API\UserQDController@userQDToday')->middleware('CheckToken', 'CheckStatus');        //用户签到接口

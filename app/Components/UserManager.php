@@ -12,6 +12,7 @@ namespace App\Components;
 use App\Models\GuanZhu;
 use App\Models\Login;
 use App\Models\User;
+use App\Models\UserUp;
 use Illuminate\Support\Facades\Log;
 use Leto\MiniProgramAES\WXBizDataCrypt;
 
@@ -340,6 +341,39 @@ class UserManager
             'unionid' => $decrytData['unionId']
         );
         return $data;
+    }
+
+    /*
+     * 根据house_id获取全部生效的案场负责人列表
+     *
+     * By TerryQi
+     *
+     * 2018-02-03
+     */
+    public static function getValidACFZRsByHouseId($house_id)
+    {
+        $user_ids = array();
+        $userUps = UserUpManager::getListByCon(['house_id' => $house_id, 'status' => '1']);
+        foreach ($userUps as $userUp) {
+            array_push($user_ids, $userUp->user_id);
+        }
+        $users = self::getListByCon(['role' => '1', 'status' => '1', 'id_arr' => $user_ids], false)->get();
+        return $users;
+    }
+
+    /*
+ * 增加中介报备次数
+ *
+ * By TerryQi
+ *
+ */
+    public static function addBaobeiTimes($user_id)
+    {
+        $user = self::getByIdWithToken($user_id);
+        if ($user) {
+            $user->baobei_times += 1;
+            $user->save();
+        }
     }
 
 }

@@ -76,8 +76,8 @@ class BaobeiController extends Controller
         }
 
         $con_arr = array(
-            'baobei_status_arr'=>['0','1'],
-            'status'=>'1',
+            'baobei_status_arr' => ['0', '1'],
+            'status' => '1',
 
         );
 
@@ -216,7 +216,7 @@ class BaobeiController extends Controller
         $house = HouseManager::getById($data['house_id']);
         if (!$client) { //如果不存在客户，需要建立客户信息
             $client = new Client();
-            $client = ClientManager::setClient($client, $data);
+            $client = ClientManager::setInfo($client, $data);
             $client->save();
             $client = ClientManager::getById($client->id);
         }
@@ -250,6 +250,7 @@ class BaobeiController extends Controller
         $baobei->trade_no = Utils::generateTradeNo();   //生成报备流水
         $baobei->save();
         $baobei = BaobeiManager::getById($baobei->id);  //保存报备信息
+        $baobei = BaobeiManager::getInfoByLevel($baobei, '');
         //向案场负责人发送消息
         $acfzrs = UserManager::getValidACFZRsByHouseId($house->id);
         foreach ($acfzrs as $acfzr) {
@@ -257,7 +258,7 @@ class BaobeiController extends Controller
                 'keyword1' => $client->name . $client->phonenum,
                 'keyword2' => $baobei->plan_visit_time,
                 'keyword3' => $house->title,
-                'keyword4' => BaobeiManager::getVisitWayTxt($baobei->visit_way)];
+                'keyword4' => $baobei->visit_way_str];
             SendMessageManager::sendMessage($acfzr->id, SendMessageManager::CLIENT_COMMING, $message_content);        //向案场负责人发送短信通知
         }
         //增加报备次数
@@ -683,8 +684,19 @@ class BaobeiController extends Controller
             $end_time = $data['end_time'];
         }
 
-        $baobeis = BaobeiManager::getListForZJByStatus($data['user_id'],
-            $baobei_status, $can_jiesuan_status, $pay_zhongjie_status, $house_id, $start_time, $end_time);
+        $con_arr = array(
+            'user_id' => $data['user_id'],
+            'baobei_status' => $baobei_status,
+            'pay_zhongjie_status' => $pay_zhongjie_status,
+            'house_id' => $house_id,
+            'start_time' => $start_time,
+            'end_time' => $end_time
+        );
+        if ($can_jiesuan_status != null) {
+            $con_arr['can_jiesuan_status'] = $can_jiesuan_status;
+            $con_arr['baobei_status_arr'] = ['2', '3', '4'];
+        }
+        $baobeis = BaobeiManager::getListByCon($con_arr, true);
         foreach ($baobeis as $baobei) {
             $baobei = BaobeiManager::getInfoByLevel($baobei, '0');
         }
@@ -742,26 +754,42 @@ class BaobeiController extends Controller
 
         //如果全部为空，则搜索该案场负责人下属的待接收楼盘
         if ($baobei_status == null && $can_jiesuan_status == null && $pay_zhongjie_status == null) {
-            $userUps = UserUpManager::getUserUpHousesByUserId($data['user_id']);
+            $userUps = UserUpManager::getListByCon(['user_id' => $data['user_id']], false);
 //            dd($userUps);
             $house_ids = array();
             foreach ($userUps as $userUp) {
                 array_push($house_ids, $userUp->house_id);      //案场负责人所属楼盘id数组
             }
-//            dd($house_ids);
-            $baobeis = BaobeiManager::getWaitingForAccpectByHouseIds($house_ids);
+            $baobeis = BaobeiManager::getListByCon(
+                ['house_ids_arr' => $house_ids, 'baobei_status_arr' => ['0', '1'], 'status' => '1'], true);
             foreach ($baobeis as $baobei) {
                 $baobei = BaobeiManager::getInfoByLevel($baobei, "0");
             }
             return ApiResponse::makeResponse(true, $baobeis, ApiResponse::SUCCESS_CODE);
         }
-        $baobeis = BaobeiManager::getListForACByStatus($data['user_id'],
-            $baobei_status, $can_jiesuan_status, $pay_zhongjie_status, $house_id, $start_time, $end_time);
+        $con_arr = array(
+            'anchang_id' => $data['user_id'],
+            'baobei_status' => $baobei_status,
+            'pay_zhongjie_status' => $pay_zhongjie_status,
+            'house_id' => $house_id,
+            'start_time' => $start_time,
+            'end_time' => $end_time
+        );
+
+        if ($can_jiesuan_status != null) {
+            $con_arr['can_jiesuan_status'] = $can_jiesuan_status;
+            $con_arr['baobei_status_arr'] = ['2', '3', '4'];
+        }
+        $baobeis = BaobeiManager::getListByCon($con_arr, true);
         foreach ($baobeis as $baobei) {
             $baobei = BaobeiManager::getInfoByLevel($baobei, '0');
         }
         return ApiResponse::makeResponse(true, $baobeis, ApiResponse::SUCCESS_CODE);
     }
+
+
+
+
 
     //手动执行计划任务-到访超期
     /*

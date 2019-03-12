@@ -89,8 +89,14 @@ class HouseManager
 
         $infos = $infos->orderby('id', 'desc');
 
+        //配置规则
         if ($is_paginate) {
-            $infos = $infos->paginate(Utils::PAGE_SIZE);
+            $page_size = Utils::PAGE_SIZE;
+            //如果con_arr中有page_size信息
+            if (array_key_exists('page_size', $con_arr) && !Utils::isObjNull($con_arr['page_size'])) {
+                $page_size = $con_arr['page_size'];
+            }
+            $infos = $infos->paginate($page_size);
         } else {
             $infos = $infos->get();
         }
@@ -126,7 +132,11 @@ class HouseManager
         }
         if (strpos($level, '1') !== false) {
             //楼盘下的产品信息
-            $info->huxings = HuxingManager::getListByCon(['house_id' => $info->id], false);
+            $huxings = HuxingManager::getListByCon(['house_id' => $info->id], false);
+            foreach ($huxings as $huxing) {
+                $huxing = HuxingManager::getInfoByLevel($huxing, '1');
+            }
+            $info->huxings = $huxings;
 
         }
         if (strpos($level, '2') !== false) {

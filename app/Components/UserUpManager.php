@@ -120,4 +120,17 @@ class UserUpManager
         }
         return $info;
     }
+
+    /*
+     * 判断一个用户是否已经是该楼盘的案场负责人
+     *
+     * By TeryQi
+     *
+     * 2018-01-21
+     */
+    public static function isUserAlreadyACFZ($user_id, $house_id)
+    {
+        $userUp = self::getListByCon(['user_id' => $user_id, 'house_id' => $house_id, 'status' => '1'], false)->first();
+        return $userUp;
+    }
 }

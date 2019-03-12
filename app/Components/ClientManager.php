@@ -104,7 +104,7 @@ class ClientManager
      * By TerryQi
      *
      */
-    public static function setClient($info, $data)
+    public static function setInfo($info, $data)
     {
         if (array_key_exists('name', $data)) {
             $info->name = array_get($data, 'name');

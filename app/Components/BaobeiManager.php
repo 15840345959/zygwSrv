@@ -174,6 +174,9 @@ class BaobeiManager
         if (array_key_exists('status_arr', $con_arr) && !Utils::isObjNull($con_arr['status_arr'])) {
             $infos = $infos->wherein('status', $con_arr['status_arr']);
         }
+        if (array_key_exists('baobei_status', $con_arr) && !Utils::isObjNull($con_arr['baobei_status'])) {
+            $infos = $infos->where('baobei_status', '=', $con_arr['baobei_status']);
+        }
         if (array_key_exists('baobei_status_arr', $con_arr) && !Utils::isObjNull($con_arr['baobei_status_arr'])) {
             $infos = $infos->wherein('baobei_status', $con_arr['baobei_status_arr']);
         }
@@ -189,8 +192,8 @@ class BaobeiManager
         if (array_key_exists('house_id', $con_arr) && !Utils::isObjNull($con_arr['house_id'])) {
             $infos = $infos->where('house_id', '=', $con_arr['house_id']);
         }
-        if (array_key_exists('baobei_status', $con_arr) && !Utils::isObjNull($con_arr['baobei_status'])) {
-            $infos = $infos->where('baobei_status', '=', $con_arr['baobei_status']);
+        if (array_key_exists('house_ids_arr', $con_arr) && !Utils::isObjNull($con_arr['house_ids_arr'])) {
+            $infos = $infos->wherein('house_id', $con_arr['house_ids_arr']);
         }
         if (array_key_exists('can_jiesuan_status', $con_arr) && !Utils::isObjNull($con_arr['can_jiesuan_status'])) {
             $infos = $infos->where('can_jiesuan_status', '=', $con_arr['can_jiesuan_status']);
@@ -656,4 +659,5 @@ class BaobeiManager
             ->where('can_jiesuan_status', '=', '1')->where('pay_zhongjie_status', '=', '0')->sum('yongjin');
         return $waingtingForPay_yongjin;
     }
+
 }

@@ -94,7 +94,7 @@ class HouseController extends Controller
 
         //根据条件搜索楼盘
         $houses = HouseManager::getListByCon($con_arr, true);
-        $level = "0";
+        $level = "";
         if (array_key_exists('level', $data)) {
             $level = $data['level'];
         }

@@ -50,7 +50,7 @@ class HuxingController extends Controller
             return ApiResponse::makeResponse(false, $requestValidationResult, ApiResponse::MISSING_PARAM);
         }
         $huxing = HuxingManager::getById($data['id']);
-        $huxing = HuxingManager::getInfoByLevel($huxing, "0");
+        $huxing = HuxingManager::getInfoByLevel($huxing, "04");
 
         return ApiResponse::makeResponse(true, $huxing, ApiResponse::SUCCESS_CODE);
     }
