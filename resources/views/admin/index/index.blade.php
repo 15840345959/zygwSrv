@@ -191,7 +191,7 @@
         <div id="iframe_box" class="Hui-admin-article">
             <div class="show_iframe">
                 <iframe id="iframe-welcome" data-scrolltop="0" scrolling="yes" frameborder="0"
-                        src="{{ URL::asset('/admin/admin/index') }}"></iframe>
+                        src="{{ URL::asset('/admin/stmt/index') }}"></iframe>
             </div>
         </div>
 

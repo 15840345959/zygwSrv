@@ -23,6 +23,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin.login']], function ()
     Route::get('/', 'Admin\IndexController@index');       //首页
     Route::get('/index', 'Admin\IndexController@index');  //首页
 
+    //业务概览
+    Route::any('/stmt/index', 'Admin\StmtController@index');    //首页
+    Route::any('/stmt/export', 'Admin\StmtController@export');  //导出数据
+
     //错误页面
     Route::get('/error/500', ['as' => 'error', 'uses' => 'Admin\IndexController@error']);  //错误页面
 

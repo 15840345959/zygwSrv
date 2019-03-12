@@ -183,6 +183,8 @@ return [
         Overtrue\LaravelUEditor\UEditorServiceProvider::class,
 
         Overtrue\LaravelWeChat\ServiceProvider::class,
+
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -235,6 +237,8 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
 
         'EasyWeChat' => Overtrue\LaravelWeChat\Facade::class,
+
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
 

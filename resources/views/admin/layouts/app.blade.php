@@ -59,6 +59,7 @@
 
 {{--common.js--}}
 <script type="text/javascript" src="{{ URL::asset('/js/common.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('/js/echarts.common.min.js') }}"></script>
 
 @yield('content')
 
