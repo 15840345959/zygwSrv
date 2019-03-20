@@ -31,7 +31,7 @@
                 <div class="formControls col-xs-8 col-sm-9">
                     <input id="wx_ewm" name="wx_ewm" type="text" class="input-text" style="width:350px"
                            value="{{ isset($data->wx_ewm) ? $data->wx_ewm : ''}}"
-                           placeholder="请输入头像网络连接地址">
+                           placeholder="请输入微信二维码图片地址">
                     <div id="container" class="margin-top-10">
                         <img id="pickfiles"
                              src="{{ isset($data->wx_ewm) ? $data->wx_ewm : URL::asset('/img/default_headicon.png') }}"
@@ -72,21 +72,9 @@
 
 @endsection
 
-@include('vendor.ueditor.assets')
-
 @section('script')
 
     <script type="text/javascript">
-
-
-        //初始化编辑器
-        var ue = UE.getEditor('content_html', {
-            initialFrameHeight: 400
-        });
-
-        ue.ready(function () {
-            ue.execCommand('serverparam', '_token', '{{ csrf_token() }}'); // 设置 CSRF token.
-        });
 
 
         $(function () {
