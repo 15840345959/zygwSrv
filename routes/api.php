@@ -53,6 +53,10 @@ Route::group(['prefix' => '', 'middleware' => ['BeforeRequest']], function () {
     Route::get('house/huxing/getListByCon', 'API\HuxingController@getListByCon');       //根据id获取户型信息-调整controller By TerryQi 需要建立HuxingContoller
     //楼盘详情
     Route::get('house/detail/getByHouseId', 'API\HouseDetailController@getByHouseId');       //根/api/house/searchByCon据id获取楼盘信息
+    //户型
+    Route::get('house/huxingStyle/getById', 'API\HuxingStyleController@getById');       //根据id获取户型信息-调整controller By TerryQi 需要建立HuxingStyleContoller
+    Route::get('house/huxingStyle/getListByCon', 'API\HuxingStyleController@getListByCon');       //根据id获取户型信息-调整controller By TerryQi 需要建立HuxingStyleContoller
+
 
     //置业顾问
     Route::get('house/zygw/getListByCon', 'API\ZYTWController@getListByCon');       //根据条件获取顾问列表
