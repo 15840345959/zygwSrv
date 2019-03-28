@@ -70,6 +70,7 @@ class HouseController extends Controller
         $type_id = null;    //类型
         $label_id = null;       //标签
         $area_id = null;        //地区
+        $page_size = null;  //分页大小
 
         if (array_key_exists('search_word', $data) && !Utils::isObjNull($data['search_word'])) {
             $search_word = $data['search_word'];
@@ -83,12 +84,16 @@ class HouseController extends Controller
         if (array_key_exists('label_id', $data) && !Utils::isObjNull($data['label_id'])) {
             $label_id = $data['label_id'];
         }
+        if (array_key_exists('page_size', $data) && !Utils::isObjNull($data['page_size'])) {
+            $page_size = $data['page_size'];
+        }
 
         $con_arr = array(
             'search_word' => $search_word,
             'type_id' => $type_id,
             'label_id' => $label_id,
             'area_id' => $area_id,
+            'page_size' => $page_size,
             'status' => '1'
         );
 

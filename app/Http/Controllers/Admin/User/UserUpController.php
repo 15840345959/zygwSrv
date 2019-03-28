@@ -73,10 +73,12 @@ class UserUpController
     public function setStatus(Request $request, $id)
     {
         $data = $request->all();
+        Utils::processLog(__METHOD__, '', " " . "userUp:" . json_encode($data));
         if (is_numeric($id) !== true) {
             return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '合规校验失败，请检查参数id$id']);
         }
         $userUp = UserUpManager::getById($data['id']);
+        Utils::processLog(__METHOD__, '', " " . "userUp:" . json_encode($userUp));
         $userUp->status = $data['status'];
         $userUp->save();
         return ApiResponse::makeResponse(true, $userUp, ApiResponse::SUCCESS_CODE);

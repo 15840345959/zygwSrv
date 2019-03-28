@@ -137,6 +137,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin.login']], function ()
     Route::any('/user/userUp/index', 'Admin\User\UserUpController@index');  //案场升级
     Route::get('/user/userUp/setStatus/{id}', 'Admin\User\UserUpController@setStatus');  //设置升级状态
 
+    Route::any('/user/recommInfo/index', 'Admin\User\RecommInfoController@index');        //推荐相关
+
     Route::get('/user/setStatus/{id}', 'Admin\User\UserController@setStatus');  //设置用户状态
     Route::get('/user/setRole/{id}', 'Admin\User\UserController@setRole');  //设置角色
 

@@ -28,7 +28,7 @@ use Illuminate\Http\Request;
 use App\Components\RequestValidator;
 use Qiniu\Auth;
 
-class HuxingStyleStyleController extends Controller
+class HuxingStyleController extends Controller
 {
 
     /*

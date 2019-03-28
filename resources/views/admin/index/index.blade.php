@@ -47,6 +47,8 @@
                         {{--href="javascript:void(0)">中介排名</a></li>--}}
                         <li><a data-href="{{ URL::asset('/admin/user/userQD/index') }}" data-title="签到明细"
                                href="javascript:void(0)">签到明细</a></li>
+                        <li><a data-href="{{ URL::asset('/admin/user/recommInfo/index') }}" data-title="推荐明细"
+                               href="javascript:void(0)">推荐明细</a></li>
                     </ul>
                 </dd>
             </dl>

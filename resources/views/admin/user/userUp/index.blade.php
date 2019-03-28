@@ -117,7 +117,7 @@
                     _token: "{{ csrf_token() }}"
                 }
                 //从后台设置申请案场状态
-                ajaxRequest('{{URL::asset('')}}' + "admin/user/setStatus/" + id, param, "GET", function (ret) {
+                ajaxRequest('{{URL::asset('')}}' + "admin/user/userUp/setStatus/" + id, param, "GET", function (ret) {
                     if (ret.result == true) {
                         $("#search_form").submit();
                     }
@@ -136,7 +136,7 @@
                     _token: "{{ csrf_token() }}"
                 }
                 //从后台设置申请案场状态
-                ajaxRequest('{{URL::asset('')}}' + "admin/user/setStatus/" + id, param, "GET", function (ret) {
+                ajaxRequest('{{URL::asset('')}}' + "admin/user/userUp/setStatus/" + id, param, "GET", function (ret) {
                     if (ret.result == true) {
                         $("#search_form").submit();
                     }

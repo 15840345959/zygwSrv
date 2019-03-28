@@ -24,15 +24,15 @@ class CheckToken
         $data = $request->all();
         //合规校验
         if (!array_key_exists('token', $data)) {
-            return ApiResponse::makeResponse(false, ApiResponse::$errorMassage[ApiResponse::TOKEN_LOST], ApiResponse::TOKEN_LOST);
+            return ApiResponse::makeResponse(false, ApiResponse::$returnMessage[ApiResponse::TOKEN_LOST], ApiResponse::TOKEN_LOST);
         }
         if (!array_key_exists('user_id', $data)) {
-            return ApiResponse::makeResponse(false, ApiResponse::$errorMassage[ApiResponse::USER_ID_LOST], ApiResponse::USER_ID_LOST);
+            return ApiResponse::makeResponse(false, ApiResponse::$returnMessage[ApiResponse::USER_ID_LOST], ApiResponse::USER_ID_LOST);
         }
         //校验token的合法性
         $result = UserManager::ckeckToken($data['user_id'], $data['token']);
         if (!$result) {
-            return ApiResponse::makeResponse(false, ApiResponse::$errorMassage[ApiResponse::TOKEN_ERROR], ApiResponse::TOKEN_ERROR);
+            return ApiResponse::makeResponse(false, ApiResponse::$returnMessage[ApiResponse::TOKEN_ERROR], ApiResponse::TOKEN_ERROR);
         }
         return $next($request);
 

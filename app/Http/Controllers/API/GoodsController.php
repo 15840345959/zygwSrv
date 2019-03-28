@@ -34,6 +34,7 @@ class GoodsController extends Controller
      */
     public function getListByCon(Request $request)
     {
+        //因为不会有很多的商品，所以没有使用分页
         $goods = GoodsManager::getListByCon(['status' => '1'], false);
         foreach ($goods as $good) {
             $good = GoodsManager::getInfoByLevel($good, '');
@@ -130,9 +131,10 @@ class GoodsController extends Controller
         if ($requestValidationResult !== true) {
             return ApiResponse::makeResponse(false, $requestValidationResult, ApiResponse::MISSING_PARAM);
         }
-        $goodsExchanges = GoodsExchangeManager::getListByUserId($data['user_id']);
+        //此处没有使用分页，因为不会有较多的兑换记录
+        $goodsExchanges = GoodsExchangeManager::getListByCon(['user_id' => $data['user_id']], false);
         foreach ($goodsExchanges as $goodsExchange) {
-            $goodsExchange = GoodsExchangeManager::getInfoByLevel($goodsExchange, 0);
+            $goodsExchange = GoodsExchangeManager::getInfoByLevel($goodsExchange, "01");
         }
         return ApiResponse::makeResponse(true, $goodsExchanges, ApiResponse::SUCCESS_CODE);
     }

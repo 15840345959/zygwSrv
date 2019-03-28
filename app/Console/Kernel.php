@@ -55,6 +55,12 @@ class Kernel extends ConsoleKernel
             Utils::processLog(__METHOD__, '', "处理头像任务 end at:" . time());
 
         })->everyMinute();
+
+        //到访超期计划任务
+        $schedule->call(function () {
+            ScheduleManager::execBaobeiExceedSchedule();
+            ScheduleManager::execDealExceedSchedult();
+        })->dailyAt('1:00');
     }
 
     /**

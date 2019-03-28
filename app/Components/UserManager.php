@@ -353,11 +353,11 @@ class UserManager
     public static function getValidACFZRsByHouseId($house_id)
     {
         $user_ids = array();
-        $userUps = UserUpManager::getListByCon(['house_id' => $house_id, 'status' => '1']);
+        $userUps = UserUpManager::getListByCon(['house_id' => $house_id, 'status' => '1'], false);
         foreach ($userUps as $userUp) {
             array_push($user_ids, $userUp->user_id);
         }
-        $users = self::getListByCon(['role' => '1', 'status' => '1', 'id_arr' => $user_ids], false)->get();
+        $users = self::getListByCon(['role' => '1', 'status' => '1', 'id_arr' => $user_ids], false);
         return $users;
     }
 

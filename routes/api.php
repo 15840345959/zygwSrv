@@ -35,7 +35,11 @@ Route::group(['prefix' => '', 'middleware' => ['BeforeRequest']], function () {
 
     //用户签到-By TerryQi
     Route::post('user/userQDToday', 'API\UserQDController@userQDToday')->middleware('CheckToken', 'CheckStatus');        //用户签到接口
-    Route::get('user/getUserQDsByUserId', 'API\UserQDController@getUserQDsByUserId')->middleware('CheckToken');        //根据用户id获取签到列表
+    Route::get('user/getUserQDsByUserId', 'API\UserQDController@getListByCon')->middleware('CheckToken');        //根据用户id获取签到列表
+
+    //用户推荐
+    Route::post('recomm/recommUser', 'API\RecommController@recommUser')->middleware('CheckToken');        //推荐用户
+    Route::get('recomm/getListByCon', 'API\RecommController@getListByCon')->middleware('CheckToken');        //根据推荐人id获取被推荐人列表
 
     //文章管理
     Route::get('tw/getById', 'API\TWController@getById');//图文
@@ -67,6 +71,8 @@ Route::group(['prefix' => '', 'middleware' => ['BeforeRequest']], function () {
 
     //兑换商品
     Route::post('goods/exchange', 'API\GoodsController@exchange')->middleware('CheckToken');     //兑换商品
+    Route::get('goods/getExchangeListByUserId', 'API\GoodsController@getExchangeListByUserId')->middleware('CheckToken');        //根据id获取商品明细信息
+
 
     //文章管理
     Route::get('tw/getInfoById', 'API\TWController@getInfoById');//图文

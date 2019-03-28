@@ -56,7 +56,12 @@ class SendMessageManager
             return;
         }
         $message = self::getTemplateContentFromMessageType($message_type, $message_content);
-        WechatManager::sendTemplateMessage($fwh_openid, $template_id, $message);
+        try {
+            WechatManager::sendTemplateMessage($fwh_openid, $template_id, $message);
+        } catch (\Exception $e) {
+            Utils::errorLog($e);
+        }
+
     }
 
     /*
@@ -73,6 +78,7 @@ class SendMessageManager
         $message = self::getSMSTemplateContentFromMessageType($message_type, $message_content);
         SMSManager::sendSMS($phonenum, $template_id, $message);
     }
+
     /*
      * 通过messageType和messageContent获取服务号模板类型
      *

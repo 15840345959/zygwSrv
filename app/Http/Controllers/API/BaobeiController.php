@@ -244,7 +244,7 @@ class BaobeiController extends Controller
         //进行客户信息报备
         $baobei = new Baobei();
 //        dd($data);
-        $baobei = BaobeiManager::setBaoBei($baobei, $data);
+        $baobei = BaobeiManager::setInfo($baobei, $data);
         $baobei->user_id = $data['user_id'];
         $baobei->client_id = $client->id;
         $baobei->trade_no = Utils::generateTradeNo();   //生成报备流水
