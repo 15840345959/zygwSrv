@@ -362,11 +362,11 @@ class UserManager
     }
 
     /*
- * 增加中介报备次数
- *
- * By TerryQi
- *
- */
+     * 增加中介报备次数
+     *
+     * By TerryQi
+     *
+     */
     public static function addBaobeiTimes($user_id)
     {
         $user = self::getByIdWithToken($user_id);
@@ -374,6 +374,25 @@ class UserManager
             $user->baobei_times += 1;
             $user->save();
         }
+    }
+
+    /*
+     * 用户是否在案场负责人列表中
+     *
+     * By TerryQi
+     *
+     * 2018-02-04
+     */
+    public static function isUserInACFZRs($user_id, $acfzrs)
+    {
+        Utils::processLog(__METHOD__, '', " " . "user_id:" . json_encode($user_id)
+            . " acfzrs:" . json_encode($acfzrs));
+        foreach ($acfzrs as $acfzr) {
+            if ($acfzr->id == $user_id) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

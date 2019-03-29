@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\Admin\Jifen;
 
+use App\Components\DateTool;
 use App\Components\GoodsExchangeManager;
 use App\Components\QNManager;
 use App\Components\Utils;
@@ -74,6 +75,7 @@ class GoodsExchangeController
         $goodsExchange = GoodsExchangeManager::getById($data['id']);
         $goodsExchange->status = $data['status'];
         $goodsExchange->admin_id = $admin->id;
+        $goodsExchange->dh_time = DateTool::getCurrentTime();
         $goodsExchange->save();
         return ApiResponse::makeResponse(true, $goodsExchange, ApiResponse::SUCCESS_CODE);
     }

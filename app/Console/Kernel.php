@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Components\ScheduleManager;
 use App\Components\UserAvaterManager;
 use App\Components\UserManager;
 use App\Components\Utils;

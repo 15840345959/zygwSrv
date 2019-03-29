@@ -105,6 +105,7 @@ class HouseController extends Controller
         }
         foreach ($houses as $house) {
             $house = HouseManager::getInfoByLevel($house, $level);
+            unset($house->content_html);
         }
         return ApiResponse::makeResponse(true, $houses, ApiResponse::SUCCESS_CODE);
     }

@@ -72,7 +72,7 @@ class BaobeiManager
      */
     public static function getInfoByLevel($info, $level)
     {
-        Utils::processLog(__METHOD__, '', " " . "info:" . json_encode($info));
+//        Utils::processLog(__METHOD__, '', " " . "info:" . json_encode($info));
 
         $info->status_str = Value::COMMON_STATUS_VAL[$info->status];
 
@@ -139,6 +139,7 @@ class BaobeiManager
         if (!Utils::isObjNull($info->pay_admin_id)) {
             $info->admin = AdminManager::getById($info->pay_admin_id);
         }
+
         return $info;
     }
 
@@ -185,6 +186,9 @@ class BaobeiManager
         }
         if (array_key_exists('pay_zhongjie_status_arr', $con_arr) && !Utils::isObjNull($con_arr['pay_zhongjie_status_arr'])) {
             $infos = $infos->wherein('pay_zhongjie_status', $con_arr['pay_zhongjie_status_arr']);
+        }
+        if (array_key_exists('user_id', $con_arr) && !Utils::isObjNull($con_arr['user_id'])) {
+            $infos = $infos->where('user_id', '=', $con_arr['user_id']);
         }
         if (array_key_exists('client_id', $con_arr) && !Utils::isObjNull($con_arr['client_id'])) {
             $infos = $infos->where('client_id', '=', $con_arr['client_id']);

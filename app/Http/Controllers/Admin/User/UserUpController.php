@@ -72,6 +72,7 @@ class UserUpController
      */
     public function setStatus(Request $request, $id)
     {
+        $admin = $request->session()->get('admin');
         $data = $request->all();
         Utils::processLog(__METHOD__, '', " " . "userUp:" . json_encode($data));
         if (is_numeric($id) !== true) {
@@ -79,6 +80,8 @@ class UserUpController
         }
         $userUp = UserUpManager::getById($data['id']);
         Utils::processLog(__METHOD__, '', " " . "userUp:" . json_encode($userUp));
+        $userUp->admin_id = $admin->id;
+        $userUp->sh_time = DateTool::getCurrentTime();
         $userUp->status = $data['status'];
         $userUp->save();
         return ApiResponse::makeResponse(true, $userUp, ApiResponse::SUCCESS_CODE);

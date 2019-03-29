@@ -107,7 +107,7 @@ class BaobeiController extends Controller
             return ApiResponse::makeResponse(false, $requestValidationResult, ApiResponse::MISSING_PARAM);
         }
         $baobei = BaobeiManager::getById($data['id']);
-        $baobei = BaobeiManager::getInfoByLevel($baobei, "0");
+        $baobei = BaobeiManager::getInfoByLevel($baobei, "012");
         return ApiResponse::makeResponse(true, $baobei, ApiResponse::SUCCESS_CODE);
     }
 
@@ -141,7 +141,7 @@ class BaobeiController extends Controller
             if (!UserManager::isUserInACFZRs($data['user_id'], $acfzrs)) {
                 return ApiResponse::makeResponse(false, '非楼盘案场负责人，无法设置客户信息', ApiResponse::INNER_ERROR);
             }
-            $baobei = BaobeiManager::setBaoBei($baobei, $data);
+            $baobei = BaobeiManager::setInfo($baobei, $data);
             $baobei->save();
             $baobei = BaobeiManager::getById($baobei->id);
             return ApiResponse::makeResponse(true, $baobei, ApiResponse::SUCCESS_CODE);
@@ -178,7 +178,7 @@ class BaobeiController extends Controller
             if ($baobei->anchang_id != $data['user_id']) {      //该条报备记录属于该案场负责人
                 return ApiResponse::makeResponse(false, '非楼盘案场负责人，无法接收客户', ApiResponse::INNER_ERROR);
             }
-            $baobei = BaobeiManager::setBaoBei($baobei, $data);
+            $baobei = BaobeiManager::setInfo($baobei, $data);
             $baobei->save();
             $baobei = BaobeiManager::getById($baobei->id);
             return ApiResponse::makeResponse(true, $baobei, ApiResponse::SUCCESS_CODE);
@@ -352,7 +352,7 @@ class BaobeiController extends Controller
         //增加用户积分，从报备单中找到中介信息
         $user = UserManager::getByIdWithToken($baobei->user_id);
         if ($user) {
-            $system = SystemManager::getSystemInfo();
+            $system = SystemManager::getCurrentInfo();
             $user->jifen = $user->jifen + $system->df_jifen;
             $user->save();
             //进行积分值的记录
@@ -419,7 +419,7 @@ class BaobeiController extends Controller
             $yongjin = $huxing->yongjin_value * $data['deal_price'] / 1000; //成交额千分比
         }
 //        dd($yongjin);
-        $baobei = BaobeiManager::setBaoBei($baobei, $data);
+        $baobei = BaobeiManager::setInfo($baobei, $data);
         $baobei->yongjin = $yongjin;
         $baobei->baobei_status = '2';    //报备状态为成交
         //deal_time不为空
@@ -454,7 +454,7 @@ class BaobeiController extends Controller
         //如果有推荐人，则增加推荐人积分
         $user = UserManager::getById($baobei->user_id);
         if (!Utils::isObjNull($user->re_user_id)) {
-            $systemInfo = SystemManager::getSystemInfo();   //系统配置信息
+            $systemInfo = SystemManager::getCurrentInfo();   //系统配置信息
             $re_user = UserManager::getByIdWithToken($user->re_user_id);
             $re_user->jifen = $re_user->jifen + $systemInfo->cj_jifen;
             $re_user->save();
@@ -505,7 +505,7 @@ class BaobeiController extends Controller
             return ApiResponse::makeResponse(false, '非楼盘案场负责人，无法接收客户', ApiResponse::INNER_ERROR);
         }
 
-        $baobei = BaobeiManager::setBaoBei($baobei, $data);
+        $baobei = BaobeiManager::setInfo($baobei, $data);
         //sign_time不为空
         if (array_key_exists('sign_time', $data) && !Utils::isObjNull($data['sign_time'])) {
             $baobei->sign_time = $data['sign_time'];
@@ -556,7 +556,7 @@ class BaobeiController extends Controller
         if ($baobei->anchang_id != $data['user_id']) {      //该条报备记录属于该案场负责人
             return ApiResponse::makeResponse(false, '非楼盘案场负责人，无法接收客户', ApiResponse::INNER_ERROR);
         }
-        $baobei = BaobeiManager::setBaoBei($baobei, $data);
+        $baobei = BaobeiManager::setInfo($baobei, $data);
         //qkdz_time不为空
         if (array_key_exists('qkdz_time', $data) && !Utils::isObjNull($data['qkdz_time'])) {
             $baobei->qkdz_time = $data['qkdz_time'];
@@ -608,7 +608,7 @@ class BaobeiController extends Controller
         if ($baobei->anchang_id != $data['user_id']) {      //该条报备记录属于该案场负责人
             return ApiResponse::makeResponse(false, '非楼盘案场负责人，无法接收客户', ApiResponse::INNER_ERROR);
         }
-        $baobei = BaobeiManager::setBaoBei($baobei, $data);
+        $baobei = BaobeiManager::setInfo($baobei, $data);
         $baobei->can_jiesuan_status = "1";
 
         //can_jiesuan_time不为空
@@ -696,6 +696,8 @@ class BaobeiController extends Controller
             $con_arr['can_jiesuan_status'] = $can_jiesuan_status;
             $con_arr['baobei_status_arr'] = ['2', '3', '4'];
         }
+        Utils::processLog(__METHOD__, '', " " . "con_arr:" . json_encode($con_arr));
+
         $baobeis = BaobeiManager::getListByCon($con_arr, true);
         foreach ($baobeis as $baobei) {
             $baobei = BaobeiManager::getInfoByLevel($baobei, '0');
@@ -754,12 +756,14 @@ class BaobeiController extends Controller
 
         //如果全部为空，则搜索该案场负责人下属的待接收楼盘
         if ($baobei_status == null && $can_jiesuan_status == null && $pay_zhongjie_status == null) {
+            Utils::processLog(__METHOD__, '', " " . "如果全部为空，则搜索该案场负责人下属的待接收楼盘");
             $userUps = UserUpManager::getListByCon(['user_id' => $data['user_id']], false);
 //            dd($userUps);
             $house_ids = array();
             foreach ($userUps as $userUp) {
                 array_push($house_ids, $userUp->house_id);      //案场负责人所属楼盘id数组
             }
+            Utils::processLog(__METHOD__, '', " " . "house_ids:" . json_encode($house_ids));
             $baobeis = BaobeiManager::getListByCon(
                 ['house_ids_arr' => $house_ids, 'baobei_status_arr' => ['0', '1'], 'status' => '1'], true);
             foreach ($baobeis as $baobei) {
@@ -767,6 +771,7 @@ class BaobeiController extends Controller
             }
             return ApiResponse::makeResponse(true, $baobeis, ApiResponse::SUCCESS_CODE);
         }
+
         $con_arr = array(
             'anchang_id' => $data['user_id'],
             'baobei_status' => $baobei_status,
