@@ -166,6 +166,20 @@
     }
 
 
+    /*产品-编辑*/
+    function edit(title, url, id) {
+        console.log("editYongjin url:" + url);
+        var index = layer.open({
+            type: 2,
+            area: ['650px', '350px'],
+            fixed: false,
+            maxmin: true,
+            title: title,
+            content: url
+        });
+    }
+
+
     /*产品佣金-编辑*/
     function editYongjin(title, url, id) {
         console.log("editYongjin url:" + url);
