@@ -168,15 +168,14 @@
 
     /*产品-编辑*/
     function edit(title, url, id) {
-        console.log("editYongjin url:" + url);
+        console.log("edit url:" + url);
         var index = layer.open({
             type: 2,
-            area: ['650px', '350px'],
-            fixed: false,
-            maxmin: true,
             title: title,
             content: url
         });
+        console.log(index);
+        layer.full(index);
     }
 
 
