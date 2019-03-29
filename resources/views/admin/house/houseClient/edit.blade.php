@@ -28,7 +28,7 @@
             </div>
             <div class="row cl" style="padding-top: 20px;">
                 <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
-                    <button class="btn btn-primary radius" onclick="clickFormateText();">整理格式（上传前请先整理格式）</button>
+                    <span class="btn btn-primary radius" onclick="clickFormateText();">整理格式（上传前请先整理格式）</span>
                     <input class="btn btn-primary radius" type="submit" value="导入房产商客户">
                     <button onClick="layer_close();" class="btn btn-default radius" type="button">取消</button>
                 </div>

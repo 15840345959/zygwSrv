@@ -192,9 +192,6 @@ class UserManager
         if (array_key_exists('role', $data)) {
             $info->role = array_get($data, 'role');
         }
-        if (array_key_exists('country', $data)) {
-            $info->country = array_get($data, 'country');
-        }
         if (array_key_exists('province', $data)) {
             $info->province = array_get($data, 'province');
         }
