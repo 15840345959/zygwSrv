@@ -138,3 +138,24 @@ function checkPass(s) {
     }
     return ls
 }
+
+
+/*
+ * 去掉空格、回车、换行
+ *
+ * By TerryQi
+ *
+ * 2018-09-12
+ */
+function formateText(str_val) {
+    var resultStr = str_val.replace(/\ +/g, ""); //去掉空格
+    resultStr = resultStr.replace(/[ ]/g, "");    //去掉空格
+    resultStr = resultStr.replace(/[\r\n]/g, ""); //去掉回车换行
+    resultStr = resultStr.replace(/[\n]/g, ""); //去掉换行
+    resultStr = resultStr.replace(/[\r]/g, ""); //去掉回车
+
+    resultStr = resultStr.replace(/(^\s+)|(\s+$)/g, "");
+    resultStr = resultStr.replace(/\s/g, "");
+
+    return resultStr;
+}

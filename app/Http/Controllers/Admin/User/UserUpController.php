@@ -15,6 +15,7 @@ use App\Components\DateTool;
 use App\Components\HouseManager;
 use App\Components\QNManager;
 use App\Components\SendMessageManager;
+use App\Components\UserManager;
 use App\Components\UserUpManager;
 use App\Components\Utils;
 use App\Http\Controllers\ApiResponse;
@@ -84,6 +85,17 @@ class UserUpController
         $userUp->sh_time = DateTool::getCurrentTime();
         $userUp->status = $data['status'];
         $userUp->save();
+        /*
+         * 2019-03-29补充逻辑，如果是审核通过，则将用户身份转换为案场负责人
+         *
+         * By TerryQi
+         */
+        if ($data['status'] == "1") {
+            $user = UserManager::getByIdWithToken($userUp->user_id);
+            $user->role = "1";
+            $user->save();
+        }
+
         return ApiResponse::makeResponse(true, $userUp, ApiResponse::SUCCESS_CODE);
     }
 
