@@ -57,6 +57,9 @@ class TWManager
         if (array_key_exists('status', $con_arr) && !Utils::isObjNull($con_arr['status'])) {
             $infos = $infos->where('status', '=', $con_arr['status']);
         }
+        if (array_key_exists('type', $con_arr) && !Utils::isObjNull($con_arr['type'])) {
+            $infos = $infos->where('type', '=', $con_arr['type']);
+        }
         if (array_key_exists('ids_arr', $con_arr) && !Utils::isObjNull($con_arr['ids_arr'])) {
             $infos = $infos->wherein('id', $con_arr['ids_arr']);
         }

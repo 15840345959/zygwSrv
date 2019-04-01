@@ -51,6 +51,9 @@ class BaobeiController
         if (array_key_exists('baobei_status', $data)) {
             $baobei_status = $data['baobei_status'];
         }
+        if (array_key_exists('search_word', $data)) {
+            $search_word = $data['search_word'];
+        }
         if (array_key_exists('can_jiesuan_status', $data)) {
             $can_jiesuan_status = $data['can_jiesuan_status'];
         }

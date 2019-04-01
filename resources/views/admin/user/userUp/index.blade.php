@@ -63,7 +63,7 @@
                             <img src="{{ $data->user->avatar ? $data->user->avatar.'?imageView2/1/w/200/h/200/interlace/1/q/75|imageslim' : URL::asset('/img/default_headicon.png')}}"
                                  class="img-rect-30 radius-5">
                         </td>
-                        <td>{{$data->user->nick_name?$data->user->nick_name:'--'}}</td>
+                        <td>{{$data->user->nick_name?$data->user->nick_name:'--'}}({{$data->user->id}})</td>
                         <td>{{$data->user->real_name?$data->user->real_name:'--'}}</td>
                         <td>{{$data->user->phonenum?$data->user->phonenum:'--'}}</td>
                         <td>{{isset($data->house->title)?$data->house->title:'--'}}

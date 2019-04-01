@@ -84,8 +84,8 @@ class ADManager
         if (array_key_exists('title', $data)) {
             $info->title = array_get($data, 'title');
         }
-        if (array_key_exists('img', $data)) {
-            $info->img = array_get($data, 'img');
+        if (array_key_exists('image', $data)) {
+            $info->image = array_get($data, 'image');
         }
         if (array_key_exists('seq', $data)) {
             $info->seq = array_get($data, 'seq');

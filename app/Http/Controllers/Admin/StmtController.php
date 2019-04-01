@@ -115,13 +115,14 @@ class StmtController
         Utils::processLog(__METHOD__, '', " " . "cellData:" . json_encode($cellData));
 
         foreach ($baobeis as $baobei) {
+            $baobei = BaobeiManager::getInfoByLevel($baobei, '012');
             $cell_data = array();
             array_push($cell_data, $baobei->trade_no);
             array_push($cell_data, $baobei->client->name);
             array_push($cell_data, $baobei->client->phonenum);
-            array_push($cell_data, BaobeiManager::getBaobeiStr($baobei->baobei_status));
-            array_push($cell_data, BaobeiManager::getCanJieSuanStr($baobei->can_jiesuan_status));
-            array_push($cell_data, BaobeiManager::getPayZhongJieStr($baobei->pay_zhongjie_status));
+            array_push($cell_data, $baobei->baobei_status_str);
+            array_push($cell_data, $baobei->can_jiesuan_status_str);
+            array_push($cell_data, $baobei->pay_zhongjie_status_str);
             array_push($cell_data, $baobei->yongjin);
             array_push($cell_data, isset($baobei->user) ? $baobei->user->real_name : '--');
             array_push($cell_data, isset($baobei->user) ? $baobei->user->phonenum : '--');
@@ -130,7 +131,7 @@ class StmtController
             array_push($cell_data, isset($baobei->house) ? $baobei->house->title : '--');
             array_push($cell_data, $baobei->created_at);
             array_push($cell_data, isset($baobei->plan_visit_time) ? $baobei->plan_visit_time : '--');
-            array_push($cell_data, BaobeiManager::getVisitWayTxt($baobei->visit_way));
+            array_push($cell_data, $baobei->visit_way_str);
             array_push($cell_data, isset($baobei->visit_time) ? $baobei->visit_time : '--');
             array_push($cell_data, isset($baobei->deal_time) ? $baobei->deal_time : '--');
             array_push($cell_data, isset($baobei->deal_size) ? $baobei->deal_size : '--');

@@ -39,7 +39,7 @@ class UserUpController
         $data = $request->all();
         //相关搜素条件
         $search_word = null;    //搜索条件
-        $status = '0';     //状态
+        $status = null;     //状态
         $user_id = null;        //用户id
 
         if (array_key_exists('status', $data) && !Utils::isObjNull($data['status'])) {

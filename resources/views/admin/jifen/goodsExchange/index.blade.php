@@ -57,8 +57,10 @@
                             <img src="{{ isset($data->goods)?$data->goods->image.'?imageView2/1/w/60/interlace/1/q/75|imageslim':Url::asset('/img/upload.png')}}"
                                  style="width: 60px;"/>
                         </td>
-                        <td><span class="c-primary">{{isset($data->goods)?$data->goods->name:'--'}}</span></td>
-                        <td><span class="c-primary">{{isset($data->user->nick_name)?$data->user->nick_name:'--'}}</span>
+                        <td><span class="c-primary">{{isset($data->goods)?$data->goods->name:'--'}}
+                                ({{$data->goods->id}})</span></td>
+                        <td><span class="c-primary">{{isset($data->user->nick_name)?$data->user->nick_name:'--'}}
+                                ({{$data->user->id}})</span>
                         </td>
                         <td>{{isset($data->user->phonenum)?$data->user->phonenum:'--'}}</td>
                         <td>{{$data->total_jifen}}</td>

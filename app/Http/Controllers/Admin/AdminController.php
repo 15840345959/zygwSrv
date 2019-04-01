@@ -166,80 +166,37 @@ class AdminController
 
         return ApiResponse::makeResponse(true, $data, ApiResponse::SUCCESS_CODE);
     }
+
+
     /*
-      2/22谢晋 编辑
-    */
-    //修改个人资料get
-    public function editMySelf(Request $request)
-    {
-        $admin = $request->session()->get('admin');
-        $admins = AdminManager::getById($admin['id']);
-        $upload_token = QNManager::uploadToken();
-        $param = array(
-            'data' => $admins,
-            'upload_token' => $upload_token //定义了个人基本信息的 头像上传token
-        );
-
-        return view('admin.admin.editMySelf', $param);
-    }
-
-    //修改个人资料post
-    public function editMySelfPost(Request $request)
+     * 编辑个人密码
+     *
+     * By TerryQi
+     *
+     * 2019-04-01
+     */
+    public function editPassword(Request $request)
     {
         $data = $request->all();
-        $return = null;
-        if (empty($data['password'])) {
-            $admin = AdminManager::getById($data['id']);
-            unset($data['password']);
-            unset($data['new_password']);
-            unset($data['confirm_password']);
-            //判断电话号码是否唯一
-            if ($data['phonenum'] != $admin['phonenum']) {
-                $con_arr = array(
-                    'phonenum' => $data['phonenum']
-                );
-                $result = AdminManager::getListByCon($con_arr, false)->first();
-                if ($result) {
-                    $return['result'] = false;
-                    $return['msg'] = '个人信息修改失败,此电话号码已被注册';
-                    return $return;
-                }
-            }
-            //设置管理员信息
-            $admin = AdminManager::setInfo($admin, $data);
-            $result = $admin->save();
-            if ($result) {
-                //存入session
-                $request->session()->put('admin', $admin);
-                $return['result'] = true;
-                $return['msg'] = '个人信息修改成功';
-            } else {
-                $return['result'] = false;
-                $return['msg'] = '个人信息修改失败';
-            }
-        } else {
-            $admin = AdminManager::getById($data['id']);
-            unset($data['name']);
-            unset($data['phonenum']);
-            if ($data['password'] != $admin['password']) {
-                $return['result'] = false;
-                $return['msg'] = '修改密码失败,原密码输入不正确';
-            } else {
-                $data['password'] = $data['new_password'];
-                unset($data['new_password']);
-                unset($data['confirm_password']);
-                $admin = AdminManager::setInfo($admin, $data);
-                $result = $admin->save();
-                if ($result) {
-                    $return['result'] = true;
-                    $return['msg'] = '修改密码成功,请重新登陆';
-                } else {
-                    $return['result'] = false;
-                    $return['msg'] = '修改密码失败';
-                }
-            }
-        }
-        return $return;
+        $admin = $request->session()->get('admin');
+
+        $upload_token = QNManager::uploadToken();
+//        dd($admin_b);
+        return view('admin.admin.editPassword', ['admin' => $admin, 'data' => null, 'upload_token' => $upload_token]);
+    }
+
+
+    //新建或编辑个人密码->post
+    public function editPasswordPost(Request $request)
+    {
+        $data = $request->all();
+        $admin = $request->session()->get('admin');
+
+        $admin = AdminManager::getById($admin->id);
+        $admin->password = $data['password'];
+        $admin->save();
+
+        return ApiResponse::makeResponse(true, $data, ApiResponse::SUCCESS_CODE);
     }
 
 

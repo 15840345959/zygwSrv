@@ -94,7 +94,7 @@ class GoodsController
             $good = GoodsManager::getById($data['id']);
         }
 
-        dd($data);
+//        dd($data);
 
         $good = GoodsManager::setInfo($good, $data);
         $good->admin_id = $admin->id;

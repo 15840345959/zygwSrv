@@ -161,7 +161,9 @@
                                     <i class="Hui-iconfont">&#xe6d5;</i>
                                 </a>
                                 <ul class="dropDown-menu menu radius box-shadow">
-                                    <li><a href="javascript:;" onClick="myself_edit()">个人信息</a></li>
+                                    <li><a href="javascript:;"
+                                           onClick="myself_edit('修改密码','{{ URL::asset('/admin/admin/editPassword') }}')">个人信息</a>
+                                    </li>
                                     <li><a href="{{ URL::asset('/admin/loginout') }}">退出</a></li>
                                 </ul>
                             </li>

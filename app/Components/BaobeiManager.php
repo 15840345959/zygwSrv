@@ -166,8 +166,8 @@ class BaobeiManager
     {
         $infos = new Baobei();
 
-        if (array_key_exists('trade_no', $con_arr) && !Utils::isObjNull($con_arr['trade_no'])) {
-            $infos = $infos->where('trade_no', 'like', '%' . $con_arr['trade_no'] . '%');
+        if (array_key_exists('search_word', $con_arr) && !Utils::isObjNull($con_arr['search_word'])) {
+            $infos = $infos->where('trade_no', 'like', '%' . $con_arr['search_word'] . '%');
         }
         if (array_key_exists('status', $con_arr) && !Utils::isObjNull($con_arr['status'])) {
             $infos = $infos->where('status', '=', $con_arr['status']);
@@ -189,6 +189,9 @@ class BaobeiManager
         }
         if (array_key_exists('user_id', $con_arr) && !Utils::isObjNull($con_arr['user_id'])) {
             $infos = $infos->where('user_id', '=', $con_arr['user_id']);
+        }
+        if (array_key_exists('anchang_id', $con_arr) && !Utils::isObjNull($con_arr['anchang_id'])) {
+            $infos = $infos->where('anchang_id', '=', $con_arr['anchang_id']);
         }
         if (array_key_exists('client_id', $con_arr) && !Utils::isObjNull($con_arr['client_id'])) {
             $infos = $infos->where('client_id', '=', $con_arr['client_id']);

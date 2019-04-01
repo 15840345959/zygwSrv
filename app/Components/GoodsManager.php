@@ -73,8 +73,8 @@ class GoodsManager
         if (array_key_exists('seq', $data)) {
             $info->seq = array_get($data, 'seq');
         }
-        if (array_key_exists('img', $data)) {
-            $info->image = array_get($data, 'img');
+        if (array_key_exists('image', $data)) {
+            $info->image = array_get($data, 'image');
         }
         if (array_key_exists('jifen', $data)) {
             $info->jifen = array_get($data, 'jifen');

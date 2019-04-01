@@ -35,8 +35,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin.login']], function ()
     Route::get('/admin/setStatus/{id}', 'Admin\AdminController@setStatus');  //设置管理员状态
     Route::get('/admin/edit', 'Admin\AdminController@edit');  //新建或编辑管理员
     Route::post('/admin/edit', 'Admin\AdminController@editPost');  //新建或编辑管理员
-    Route::get('/admin/editMySelf', ['as' => 'editMySelf', 'uses' => 'Admin\AdminController@editMySelf']);  //修改个人资料get
-    Route::post('/admin/editMySelf', 'Admin\AdminController@editMySelfPost');  //修改个人资料post
+    Route::get('/admin/editPassword', 'Admin\AdminController@editPassword');  //修改个人密码get
+    Route::post('/admin/editPassword', 'Admin\AdminController@editPasswordPost');  //修改个人密码post
 
     //轮播图管理
     Route::any('/ad/index', 'Admin\ADController@index');  //轮播图管理

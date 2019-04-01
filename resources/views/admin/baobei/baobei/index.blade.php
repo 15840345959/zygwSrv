@@ -110,7 +110,7 @@
                         <td>
                             <span class="c-primary">{{$data->client->phonenum}}</span>
                         </td>
-                        <td><span class="c-primary">{{$data->user->nick_name}}</span></td>
+                        <td><span class="c-primary">{{$data->user->nick_name}}({{$data->user->id}})</span></td>
                         <td>{{$data->house->title}}</td>
                         <td>{{$data->yongjin}}</td>
                         <td>
