@@ -116,7 +116,7 @@ class UserController extends Controller
         if ($user) {
             return ApiResponse::makeResponse(true, $user, ApiResponse::SUCCESS_CODE);
         } else {
-            return ApiResponse::makeResponse(false, ApiResponse::$errorMassage[ApiResponse::NO_USER], ApiResponse::NO_USER);
+            return ApiResponse::makeResponse(false, ApiResponse::$returnMessage[ApiResponse::NO_USER], ApiResponse::NO_USER);
         }
     }
 
@@ -143,7 +143,7 @@ class UserController extends Controller
         if ($user) {
             return ApiResponse::makeResponse(true, $user, ApiResponse::SUCCESS_CODE);
         } else {
-            return ApiResponse::makeResponse(false, ApiResponse::$errorMassage[ApiResponse::NO_USER], ApiResponse::NO_USER);
+            return ApiResponse::makeResponse(false, ApiResponse::$returnMessage[ApiResponse::NO_USER], ApiResponse::NO_USER);
         }
     }
 

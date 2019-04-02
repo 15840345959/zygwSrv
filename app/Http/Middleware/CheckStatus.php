@@ -24,11 +24,11 @@ class CheckStatus
         $data = $request->all();
         //合规校验
         if (!array_key_exists('user_id', $data)) {
-            return ApiResponse::makeResponse(false, ApiResponse::$errorMassage[ApiResponse::USER_ID_LOST], ApiResponse::USER_ID_LOST);
+            return ApiResponse::makeResponse(false, ApiResponse::$returnMessage[ApiResponse::USER_ID_LOST], ApiResponse::USER_ID_LOST);
         }
         $user = UserManager::getById($data['user_id']);
         if ($user->status == '0') {
-            return ApiResponse::makeResponse(false, ApiResponse::$errorMassage[ApiResponse::USER_INVALID], ApiResponse::USER_INVALID);
+            return ApiResponse::makeResponse(false, ApiResponse::$returnMessage[ApiResponse::USER_INVALID], ApiResponse::USER_INVALID);
         }
         return $next($request);
     }
