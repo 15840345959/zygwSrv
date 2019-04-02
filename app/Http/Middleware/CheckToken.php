@@ -24,7 +24,7 @@ class CheckToken
         $data = $request->all();
         //合规校验
         if (!array_key_exists('token', $data)) {
-            return ApiResponse::makeResponse(false, ApiResponse::$returnMessage[ApiResponse::TOKEN_LOST], ApiResponse::TOKEN_LOST);
+            return ApiResponse::makeResponse(false, ApiResponse::$returnMessage[ApiResponse::TOKEN_ERROR], ApiResponse::TOKEN_ERROR);
         }
         if (!array_key_exists('user_id', $data)) {
             return ApiResponse::makeResponse(false, ApiResponse::$returnMessage[ApiResponse::USER_ID_LOST], ApiResponse::USER_ID_LOST);
