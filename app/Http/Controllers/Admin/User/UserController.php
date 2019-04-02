@@ -45,7 +45,7 @@ class UserController
         if (is_numeric($id) !== true) {
             return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '合规校验失败，请检查参数id$id']);
         }
-        $user = UserManager::getById($data['id']);
+        $user = UserManager::getByIdWithToken($data['id']);
         $user->status = $data['status'];
         $user->save();
         return ApiResponse::makeResponse(true, $user, ApiResponse::SUCCESS_CODE);
@@ -64,7 +64,7 @@ class UserController
         if (is_numeric($id) !== true) {
             return redirect()->action('\App\Http\Controllers\Admin\IndexController@error', ['msg' => '合规校验失败，请检查参数id$id']);
         }
-        $user = UserManager::getById($data['id']);
+        $user = UserManager::getByIdWithToken($data['id']);
         $user->role = $data['role'];
         $user->save();
 
