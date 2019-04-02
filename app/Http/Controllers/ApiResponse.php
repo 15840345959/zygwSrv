@@ -35,6 +35,9 @@ class ApiResponse
     const PHONENUM_DUP = 106;    //手机号重复
     const PHONENUM_ALREAD_REGISTED = 107; //手机号已经注册过
 
+    //用户失效
+    const USER_INVALID = 108;
+
     //投票错误
     const VOTE_OUTOF_NUM = 301;     //投票数已用完
     const VOTE_ALREADY_APPLY = 302;     //已经报名，正在审核中
@@ -66,6 +69,7 @@ class ApiResponse
         self::VERTIFY_ERROR => '验证码验证失败',
         self::PHONENUM_DUP => '手机号码重复',
         self::PHONENUM_ALREAD_REGISTED => '手机号已经注册',
+        self::USER_INVALID => '用户失效',
 
         //投票相关
         self::VOTE_OUTOF_NUM => '投票数已用完',
