@@ -87,7 +87,7 @@ class HouseManager
             $infos = $infos->where('status', '=', $con_arr['status']);
         }
 
-        $infos = $infos->orderby('id', 'desc');
+        $infos = $infos->orderby('seq', 'desc')->orderby('id', 'desc');
 
         //配置规则
         if ($is_paginate) {
