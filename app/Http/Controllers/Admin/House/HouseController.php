@@ -118,11 +118,13 @@ class HouseController
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //户型信息
-        $huxings = HuxingManager::getListByCon(['house_id' => $house->id], false);
-        foreach ($huxings as $huxing) {
-            $huxing = HuxingManager::getInfoByLevel($huxing, '013');
+        $huxings = [];
+        if (!Utils::isObjNull($house->id)) {
+            $huxings = HuxingManager::getListByCon(['house_id' => $house->id], false);
+            foreach ($huxings as $huxing) {
+                $huxing = HuxingManager::getInfoByLevel($huxing, '013');
+            }
         }
-
         //案场负责人信息
         $userUps = UserUpManager::getListByCon(['house_id' => $house->id, 'status' => '1'], false);
         foreach ($userUps as $userUp) {
