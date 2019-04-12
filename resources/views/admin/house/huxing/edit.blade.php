@@ -90,6 +90,14 @@
                     <span class="ml-5">元（人民币） / ‰（千分比）</span>
                 </div>
             </div>
+            <div class="row cl item c-999">
+                <label class="form-label col-xs-4 col-sm-2"></label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <div>
+                        <span class="c-danger">请注意，佣金设置涉及到结算，因此全部佣金设置操作都将记录，请在佣金设置功能中进行佣金的修改和配置！</span>
+                    </div>
+                </div>
+            </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>面积区间（m²）：</label>
                 <div class="formControls col-xs-8 col-sm-9">
