@@ -40,6 +40,14 @@ class HouseClientManager
     {
         $infos = new HouseClient();
         //相关条件
+
+        if (array_key_exists('search_word', $con_arr) && !Utils::isObjNull($con_arr['search_word'])) {
+            $keyword = $con_arr['search_word'];
+            $infos = $infos->where(function ($query) use ($keyword) {
+                $query->where('phonenum', 'like', "%{$keyword}%");
+            });
+        }
+
         if (array_key_exists('house_id', $con_arr) && !Utils::isObjNull($con_arr['house_id'])) {
             $infos = $infos->where('house_id', '=', $con_arr['house_id']);
         }

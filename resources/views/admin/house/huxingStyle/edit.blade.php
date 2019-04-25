@@ -55,13 +55,13 @@
                     <span>m²</span>
                 </div>
             </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>优惠：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input id="benefit" name="benefit" type="text" class="input-text"
-                           value="{{ isset($data->benefit) ? $data->benefit : '' }}" placeholder="请输入优惠说明">
-                </div>
-            </div>
+            {{--<div class="row cl">--}}
+                {{--<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>优惠：</label>--}}
+                {{--<div class="formControls col-xs-8 col-sm-9">--}}
+                    {{--<input id="benefit" name="benefit" type="text" class="input-text"--}}
+                           {{--value="{{ isset($data->benefit) ? $data->benefit : '' }}" placeholder="请输入优惠说明">--}}
+                {{--</div>--}}
+            {{--</div>--}}
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>朝向：</label>
                 <div class="formControls col-xs-8 col-sm-9">

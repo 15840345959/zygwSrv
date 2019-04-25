@@ -41,14 +41,20 @@ class HouseClientController
         $data = $request->all();
         //配置参数
         $house_id = null;
+        $search_word = null;
 
         if (array_key_exists('house_id', $data) && !Utils::isObjNull($data['house_id'])) {
             $house_id = $data['house_id'];
         }
         $house = HouseManager::getById($house_id);
 
+        if (array_key_exists('search_word', $data) && !Utils::isObjNull($data['search_word'])) {
+            $search_word = $data['search_word'];
+        }
+
         $con_arr = array(
             'house_id' => $house_id,
+            'search_word' => $search_word
         );
         $houseClients = HouseClientManager::getListByCon($con_arr, true);
 

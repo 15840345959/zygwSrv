@@ -16,7 +16,9 @@
                   action="{{URL::asset('admin/house/houseClient/index')}}?page={{$datas->currentPage()}}"
                   method="post" class="form-horizontal">
                 {{csrf_field()}}
-                <div class="Huiform text-r">
+                <div class="Huiform text-r ml-5">
+                    <input id="search_word" name="search_word" type="text" class="input-text" style="width:450px"
+                           placeholder="根据手机号模糊搜索" value="{{$con_arr['search_word']}}">
                     <input id="house_id" name="house_id" type="text" class="input-text" style="width:150px"
                            placeholder="楼盘id" value="{{$con_arr['house_id']}}">
                     <button type="submit" class="btn btn-success" id="" name="">

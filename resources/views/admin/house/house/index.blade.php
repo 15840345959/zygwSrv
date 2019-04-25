@@ -86,9 +86,9 @@
                             <div class="mt-5">
                                 <span>面积区间：</span><span class="ml-5">{{$data->size_min}}至{{$data->size_max}}m²</span>
                             </div>
-                            <div class="mt-5">
-                                <span>剩余套数：</span><span class="ml-5">{{$data->count}}套</span>
-                            </div>
+                            {{--<div class="mt-5">--}}
+                                {{--<span>剩余套数：</span><span class="ml-5">{{$data->count}}套</span>--}}
+                            {{--</div>--}}
                             <div class="mt-5">
                                 <span>标签：</span>
                                 @foreach($data->labels as $label)

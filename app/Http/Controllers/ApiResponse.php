@@ -54,6 +54,9 @@ class ApiResponse
     //补卡相关
     const MRYH_REISSUE_LACKOF_SCORE = 70301;     //用户补卡积分不足
 
+    //报备单已经失效
+    const BAOBEI_INVALID = 107;
+
     //映射错误信息
     public static $returnMessage = [
         self::SUCCESS_CODE => '调用成功',
@@ -70,7 +73,7 @@ class ApiResponse
         self::PHONENUM_DUP => '手机号码重复',
         self::PHONENUM_ALREAD_REGISTED => '手机号已经注册',
         self::USER_INVALID => '用户失效',
-
+        self::BAOBEI_INVALID => '报备单失效',
         //投票相关
         self::VOTE_OUTOF_NUM => '投票数已用完',
         self::VOTE_ALREADY_APPLY => '已经报名，正在审核中',
