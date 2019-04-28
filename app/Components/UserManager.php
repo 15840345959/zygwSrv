@@ -160,7 +160,8 @@ class UserManager
     public static function setInfo($info, $data)
     {
         if (array_key_exists('nick_name', $data)) {
-            $info->nick_name = array_get($data, 'nick_name');
+            $nick_name = Utils::removeEmoji(array_get($data, 'nick_name'));
+            $info->nick_name = $nick_name;
         }
         if (array_key_exists('real_name', $data)) {
             $info->real_name = array_get($data, 'real_name');

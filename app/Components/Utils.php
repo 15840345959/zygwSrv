@@ -125,6 +125,21 @@ class Utils
         return $response;
     }
 
+    /*
+     * 去除emoj符号
+     *
+     * By TerryQi
+     *
+     * 2018-04-08
+     */
+    public static function removeEmoji($text)
+    {
+        $value = json_encode($text);
+        $value = preg_replace("/\\\u[ed][0-9a-f]{3}\\\u[ed][0-9a-f]{3}/", "*", $value);//替换成*
+        $value = json_decode($value);
+        return $value;
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///
