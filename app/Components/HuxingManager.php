@@ -77,15 +77,18 @@ class HuxingManager
             $yongjin_value_str = $info->yongjin_value . "元";
         } else {
             //设置单位
-            $unit = '‰';        //默认千分比
-            if ($info->yongjin_value > 10) {        //如果大于10，则为百分比
-                $unit = '%';
-                $yongjin_value_str = ((double)$info->yongjin_value / 10) . $unit;
-            } else {
-                $yongjin_value_str = ($info->yongjin_value) . $unit;
-            }
+            //2019-05-23统一调整为百分比
+//            $unit = '‰';        //默认千分比
+//            if ($info->yongjin_value >= 10) {        //如果大于10，则为百分比
+//                $unit = '%';
+//                $yongjin_value_str = ((double)$info->yongjin_value / 10) . $unit;
+//            } else {
+//                $yongjin_value_str = ($info->yongjin_value) . $unit;
+//            }
+
+            $unit = '%';        //默认千分比
+            $yongjin_value_str = ((double)$info->yongjin_value / 10) . $unit;
         }
-        $yongjin_value_str = $yongjin_value_str;
 
         $info->yongjin_value_str = $yongjin_value_str;
 
