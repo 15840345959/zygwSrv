@@ -238,8 +238,8 @@ class BaobeiController extends Controller
         }
         //4）报备时，预计到访时间应该在当天且在当前时间30分钟之后
         $data_diff = DateTool::dateDiff('N', DateTool::getCurrentTime(), $data['plan_visit_time']);
-        if ($data_diff < 30) {
-            return ApiResponse::makeResponse(false, '预计到访时间应在30分钟之后', ApiResponse::INNER_ERROR);
+        if ($data_diff < 20) {
+            return ApiResponse::makeResponse(false, '预计到访时间应在20分钟之后', ApiResponse::INNER_ERROR);
         }
         //进行客户信息报备
         $baobei = new Baobei();
